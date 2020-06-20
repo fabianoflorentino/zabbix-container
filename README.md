@@ -6,6 +6,8 @@
 
 ## **Uso rápido**
 
+### **Requisitos**
+
 ```shell
 
 # Faça uma cópia do exemplo de inventário
