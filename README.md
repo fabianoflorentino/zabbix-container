@@ -8,6 +8,10 @@
 
 ### **Requisitos**
 
+- [x] OpenSSH OpenSSH_8.1p1, LibreSSL 2.7.3
+- [x] Ansible 2.9+
+- [x] Docker 19.03.8+
+
 ```shell
 
 # Faça uma cópia do exemplo de inventário
@@ -41,7 +45,9 @@ all:
 ```
 
 ```shell
-
+# Implantar servidor
 ansible-playbook -i inventories/<seu inventario>/hosts.yml -u root -k server.yml
 
+# Instalar o agente
+ansible-playbook -i inventories/<seu inventario>/hosts.yml -u root -k agent.yml
 ```
