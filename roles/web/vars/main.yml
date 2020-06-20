@@ -1,0 +1,9 @@
+---
+# Zabbix Web
+zabbix_web_container_name: "zabbix-web-nginx-mysql"
+zabbix_web_image: "brgtsisdt3ptf001/zabbix-web-nginx-mysql"
+zabbix_web_image_tar: "brgtsisdt3ptf001-zabbix-web-nginx-mysql.tar"
+zabbix_web_file_dest: "/tmp/{{ zabbix_web_image_tar }}"
+zabbix_web_port: "8080"
+zabbix_exp_ports: "8080:{{ zabbix_web_port }}"
+zabbix_web_php_tz: "America/Sao_Paulo"

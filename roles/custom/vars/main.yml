@@ -1,0 +1,12 @@
+---
+scripts_zbx_externalscripts:
+  - "zext_ssl_expiry.sh"
+  - "zext_ssl_issuer.sh"
+
+scripts_zbx_alertscripts:
+  - "slack_alerts.sh"
+  - "zbx_create_media.sh"
+
+
+# Slack
+slack_incoming_webhook: "https://hooks.slack.com/services/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"

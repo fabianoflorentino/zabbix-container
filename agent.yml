@@ -1,0 +1,14 @@
+---
+- name: Instalação e Configuração do Zabbix Agent
+  hosts:
+    - agent_linux
+  gather_facts: True
+  pre_tasks:
+    - setup:
+        gather_subset:
+          - '!all'
+          - '!any'
+          - 'network'
+          - 'virtual'
+  roles:
+    - {role: agent, tags: agent}

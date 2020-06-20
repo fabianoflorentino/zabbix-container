@@ -1,0 +1,38 @@
+---
+- name: Verificando se o Zabbix Agent está configuardo
+  stat:
+    path: /etc/zabbix/zabbix_agentd.conf
+  register: zabbix_agentd_conf
+
+- name: Zabbix Agent Linux
+  block:
+    - name: Download do Pacote de instalação
+      get_url:
+        url: "{{ zabbix_agent_rpm_package }}"
+        dest: ./roles/agent/files/
+        validate_certs: no
+      delegate_to: localhost
+
+    - name: Transferindo o Pacote de instalação para o Host
+      copy:
+        src: "{{ zabbix_agent_package_linux }}"
+        dest: /tmp/
+
+    - name: Instalando o Pacote Zabbix Agent
+      yum:
+        name: "/tmp/{{ zabbix_agent_package_linux }}"
+        state: present
+
+    - name: Linux - Configurando o Zabbix Agent
+      template:
+        src: linux_zabbix_agentd.conf.j2
+        dest: /etc/zabbix/zabbix_agentd.conf
+      notify: Reiniciando o Agent Zabbix
+
+    - name: Iniciando o Serviço Zabbix Agent
+      systemd:
+        name: zabbix-agent
+        state: started
+        enabled: yes
+  when: 
+    - (zabbix_agentd_conf.stat.exists != true)

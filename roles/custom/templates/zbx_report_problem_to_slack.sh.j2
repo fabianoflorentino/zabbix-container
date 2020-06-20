@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix_web_port }}/api_jsonrpc.php' \
+--header 'Content-Type: application/json' \
+--data '{
+    "jsonrpc": "2.0",
+    "method": "action.create",
+    "auth": "{{ zabbix_auth_token.stdout }}",
+    "id": 1,
+    "params": {
+        "name": "Slack - Report problems to Zabbix administrators",
+        "status": "0",
+        "eventsource": "0",
+        "esc_period": "1h",
+        "def_shortdata": "Problem: {EVENT.NAME}",
+        "def_longdata": ":red_circle: Problem started at *{EVENT.TIME} on {EVENT.DATE}*\r\nProblem name: *{EVENT.NAME}*\r\nHost: {HOST.NAME} *[{HOST.IP}]*\r\nSeverity: *{EVENT.SEVERITY}*\r\n\r\nOriginal problem ID: {EVENT.ID}\r\n{TRIGGER.URL}",
+        "r_shortdata": "Resolved: {EVENT.NAME}",
+        "r_longdata": ":white_check_mark: Problem has been resolved at *{EVENT.RECOVERY.TIME} on {EVENT.RECOVERY.DATE}*\r\nProblem name: *{EVENT.NAME}*\r\nHost: {HOST.NAME} *[{HOST.IP}]*\r\nSeverity: *{EVENT.SEVERITY}*\r\n\r\nOriginal problem ID: {EVENT.ID}\r\n{TRIGGER.URL}",
+        "pause_suppressed": "1",
+        "ack_shortdata": "Updated problem: {EVENT.NAME}",
+        "ack_longdata": "{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.\r\n{EVENT.UPDATE.MESSAGE}\r\n\r\nCurrent problem status is {EVENT.STATUS}, acknowledged: {EVENT.ACK.STATUS}.",
+        "filter": {
+            "evaltype": "0",
+            "formula": "",
+            "conditions": []
+        },
+        "operations": [
+            {
+                "operationtype": "0",
+                "opmessage": {
+                    "default_msg": "1",
+                    "subject": "Problem: {EVENT.NAME}",
+                    "message": "Problem started at {EVENT.TIME} on {EVENT.DATE}\r\nProblem name: {EVENT.NAME}\r\nHost: {HOST.NAME}\r\nSeverity: {EVENT.SEVERITY}\r\n\r\nOriginal problem ID: {EVENT.ID}\r\n{TRIGGER.URL}",
+                    "mediatypeid": "4"
+                },
+                "opmessage_grp": [
+                    {
+                        "operationid": "3",
+                        "usrgrpid": "7"
+                    }
+                ],
+                "opmessage_usr": []
+            }
+        ],
+        "recovery_operations": [
+            {
+                "operationtype": "11",
+                "opmessage": {
+                    "default_msg": 1
+                }
+            }
+        ]
+    }
+}'

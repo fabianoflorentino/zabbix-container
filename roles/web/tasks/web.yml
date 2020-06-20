@@ -1,0 +1,83 @@
+---
+- name: "{{ zabbix_web_container_name }} - Verificando se o container existe"
+  docker_container_info:
+    name: "{{ zabbix_web_container_name }}"
+  register: zabbix_web_result
+
+- name: Zabbix Web
+  block:
+    - name: "{{ zabbix_web_container_name }} - Dockerhub"
+      docker_image:
+        name: "{{ zabbix_web_image }}"
+        source: pull
+
+    - name: "{{ zabbix_web_container_name }} - Iniciando container"
+      docker_container:
+        name: "{{ zabbix_web_container_name }}"
+        image: "{{ zabbix_web_image }}"
+        state: started
+        restart: yes
+        recreate: yes
+        restart_policy: unless-stopped
+        links:
+          - "{{ mysql_container_name }}:mysql"
+          - "{{ zabbix_server_container_name }}:zabbix-server"
+        ports:
+          - "{{ zabbix_exp_ports }}"
+        env:
+          DB_SERVER_HOST: "{{ zabbix_server_db_host }}"
+          MYSQL_DATABASE: "{{ mysql_zbx_db }}"
+          MYSQL_USER: "{{ mysql_zbx_db_user }}"
+          MYSQL_PASSWORD: "{{ mysql_zbx_db_pwd }}"
+          MYSQL_ROOT_PASSWORD: "{{ mysql_root_pwd }}"
+          PHP_TZ: "{{ zabbix_web_php_tz }}"
+  rescue:
+    - name: "{{ zabbix_web_container_name }} - Baixando a imagem do Dockerhub"
+      docker_image:
+        name: "{{ zabbix_web_image }}"
+        source: pull
+      delegate_to: localhost
+
+    - name: "{{ zabbix_web_container_name }} - Savando a Imagem localmente"
+      shell: |
+        docker save -o "./roles/web/files/{{ zabbix_web_image_tar }}" "{{ zabbix_web_image }}"
+      delegate_to: localhost
+
+    - name: "{{ zabbix_web_container_name }} - Repositorio Local"
+      copy:
+        src: "{{ zabbix_web_image_tar }}"
+        dest: "{{ zabbix_web_file_dest }}"
+
+    - name: "{{ zabbix_web_container_name }} - Carregando a Imagem"
+      docker_image:
+        name: "{{ zabbix_web_container_name }}"
+        load_path: "{{ zabbix_web_file_dest }}"
+        source: load    
+
+    - name: "{{ zabbix_web_container_name }} - Iniciando container"
+      docker_container:
+        name: "{{ zabbix_web_container_name }}"
+        image: "{{ zabbix_web_image }}"
+        state: started
+        restart: yes
+        recreate: yes
+        restart_policy: unless-stopped
+        links:
+          - "{{ mysql_container_name }}:mysql"
+          - "{{ zabbix_server_container_name }}:zabbix-server"
+        ports:
+          - "{{ zabbix_exp_ports }}"
+        env:
+          DB_SERVER_HOST: "{{ zabbix_server_db_host }}"
+          MYSQL_DATABASE: "{{ mysql_zbx_db }}"
+          MYSQL_USER: "{{ mysql_zbx_db_user }}"
+          MYSQL_PASSWORD: "{{ mysql_zbx_db_pwd }}"
+          MYSQL_ROOT_PASSWORD: "{{ mysql_root_pwd }}"
+          PHP_TZ: "{{ zabbix_web_php_tz }}"
+
+    - name: "{{ zabbix_web_container_name }} - Removendo arquivos de imagens temporários"
+      file:
+        path: "{{ zabbix_web_file_dest }}"
+        state: absent
+  when:
+    - (zabbix_web_result.exists !=  true)

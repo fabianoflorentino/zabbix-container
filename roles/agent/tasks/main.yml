@@ -1,0 +1,10 @@
+---
+- name: Linux
+  block:
+    - include_tasks: linux.yml
+  when: ansible_os_family == "RedHat"
+
+- name: AIX
+  block:
+    - include_tasks: aix.yml
+  when: ansible_os_family == "AIX"

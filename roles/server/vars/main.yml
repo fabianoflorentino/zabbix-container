@@ -1,0 +1,13 @@
+---
+# Zabbix Server
+zabbix_server_container_name: "zabbix-server-mysql"
+zabbix_server_image: "brgtsisdt3ptf001/zabbix-server-mysql"
+zabbix_server_image_tar: "brgtsisdt3ptf001-zabbix-server-mysql.tar"
+zabbix_server_file_dest: "/tmp/{{ zabbix_server_image_tar }}"
+zabbix_server_ports: "10051:10051"
+zabbix_server_db_host: "mysql-server"
+zabbix_server_ip: "{{ ansible_host }}"
+zabbix_admin_user: "Admin"
+zabbix_passwd_user: "zabbix"
+zabbix_host_metadata_linux: "Linux Servers 41e8903a14830a2ebb4c6f95326b75555247a3e2da9336105537b615fc59449c"
+zabbix_host_metadata_windows: "Windows Server a31261ebf34bbbfb1a85b16d9d16327eb34ff03be76b0422c39df1309d794cbc"

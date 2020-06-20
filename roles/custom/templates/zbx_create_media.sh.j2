@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix_web_port }}/api_jsonrpc.php' \
+--header 'Content-Type: application/json' \
+--data '{
+    "jsonrpc": "2.0",
+    "method": "mediatype.create",
+    "id": 1,
+    "auth": "{{ zabbix_auth_token.stdout }}",
+    "params": {
+        "type": 1,
+        "name": "Slack Alerts",
+        "exec_path": "slack_alerts.sh",
+        "exec_params": "{{ slack_incoming_webhook }}\n{ALERT.MESSAGE}\n",
+        "maxattempts": "1",
+        "attempt_interval": "30s"
+    }
+}'

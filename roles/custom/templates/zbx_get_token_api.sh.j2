@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+ZABBIX_API_URL="http://{{ zabbix_server_ip }}:{{ zabbix_web_port }}/api_jsonrpc.php"
+ZABBIX_JSON_DATA='{"jsonrpc": "2.0","method": "user.login","params": {"user": "{{ zabbix_admin_user }}","password": "{{ zabbix_passwd_user }}"},"id": 1,"auth": null}'
+ZABBIX_CONTENT_TYPE="Content-Type: application/json"
+ZABBIX_TOKEN_FILE="/tmp/token.out"
+
+{
+
+    curl --silent --location --request POST ${ZABBIX_API_URL} --header "${ZABBIX_CONTENT_TYPE}" --data "${ZABBIX_JSON_DATA}" > ${ZABBIX_TOKEN_FILE}
+    TOKEN=$(cat ${ZABBIX_TOKEN_FILE} |awk -F ":" '{ print $3 }' |cut -d"\"" -f2 |xargs)
+
+} &> /dev/null && echo -e "${TOKEN}"
+
+rm -rf ${ZABBIX_TOKEN_FILE}
