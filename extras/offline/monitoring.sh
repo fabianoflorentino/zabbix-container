@@ -122,6 +122,7 @@ function zabbix_server_mysql() {
             -e MYSQL_USER="zabbix" \
             -e MYSQL_PASSWORD="${ZABBIX_DB_PWD}" \
             -e MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PWD}" \
+            -e ZBX_CACHESIZE=2048M \
             -p 10051:10051 \
             --link mysql-server:mysql \
             brgtsisdt3ptf001/zabbix-server-mysql:latest

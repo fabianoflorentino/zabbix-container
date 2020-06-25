@@ -1,53 +1,17 @@
-# **Implantar sistema de monitoramento para sua infraestrutura de servidores**
+# **Serviço de Monitoramento com Zabbix + Grafana em Container Docker**
 
-![zabbix-logo](./docs/img/zabbix_logo_255x67.png)   ![grafana-logo](./docs/img/grafana_logo_255x62.png)
+**Descrição:**
+Conjuto de roles ansible para instalar, configurar e customizar o monitoramento zabbix com grafana.
 
-- Pode ser implantado em qualquer plataforma que suporte a tecnologia de containers docker
+## **Roles**
 
-## **Uso rápido**
-
-### **Requisitos**
-
-- [x] OpenSSH OpenSSH_8.1p1, LibreSSL 2.7.3
-- [x] Ansible 2.9+
-- [x] Docker 19.03.8+
-
-```shell
-
-# Faça uma cópia do exemplo de inventário
-cd ./inventories
-cp -rf sample <seu inventário>
-
-# Edite seu invetário com as informações do seu ambiente
-vi ./inventorie/<seu inventário>/hosts.yml
-```
-
-```yml
----
-all:
-  vars:
-    zabbix_server_ip: "1.2.3.4" # IP do servidor
-    zabbix_agent_port: "10050"  # Porta do agente
-    mysql_zbx_db_pwd: ""        # Preencha as variáveis mysql_zbx_db_pwd e mysql_root_pwd com uma senha de sua preferência
-    mysql_root_pwd: ""          # --^^^
-  hosts:
-    zabbix-server:              # Hostname do servidor
-      ansible_host: 1.2.3.4     # IP do servidor
-  children:
-    server:
-      hosts:
-        zabbix-server:          # Servidor zabbix
-    agent_linux:
-      hosts:
-        zabbix-server:          # Host(s) que serão monitorados
-    agent_windows:
-      hosts:
-```
-
-```shell
-# Implantar servidor
-ansible-playbook -i inventories/<seu inventario>/hosts.yml -u root -k server.yml
-
-# Instalar o agente
-ansible-playbook -i inventories/<seu inventario>/hosts.yml -u root -k agent.yml
+```bash
+./roles
+├── agent
+├── common
+├── custom
+├── grafana
+├── mysql
+├── server
+└── web
 ```

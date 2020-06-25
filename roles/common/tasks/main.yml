@@ -19,55 +19,25 @@
 - name: Preparando o sistema operacional
   block:
     - name: Atualizando o Sistema
-      yum:
+      package:
         name: "*"
         state: latest
       ignore_errors: yes
 
     - name: Instalando pacotes essenciais
-      yum:
+      package:
         name:  "{{ item }}"
         state: present
       loop: "{{ packages.to_install }}"
       ignore_errors: yes
 
-- name: Python
-  block:
-    - name: Instalando Python Pip
-      yum:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ python.package }}"
-    
-    - name: Instalando Docker Pip (SDK)
+    - name: Modulo Pip
       pip:
-        name: "{{ item }}"
-      loop: "{{ python.pip }}"
-  rescue:
-    - name: Download dos pacotes do Python Pip localmente
-      get_url:
-        url: "{{ python2_pip_offline_url }}"
-        dest: ./roles/common/files/
-        validate_certs: no
-      delegate_to: localhost
-
-    - name: Copiando os pacotes do python
-      unarchive:
-        src: python2-pip.tgz
-        dest: /tmp
-        
-    - name: Instalando os pacotes do Python Pip
-      yum:
-        name: "/tmp/python2-pip/{{ item }}"
-        state: present
-      loop: "{{ python2_pip_offline.packages }}"
-
-    - name: Removendo os pacotes de instalacao do Pyhton Pip
-      file:
-        path: /tmp/python2-pip
-        state: absent
-  when:
-    - (ansible_os_family == 'RedHat')
+        name:
+          - pip
+          - docker
+        extra_args: --upgrade
+      ignore_errors: yes
 
 - name: Docker
   block:
@@ -95,40 +65,11 @@
       yum:
         name:  docker-ce
         state: present
+      ignore_errors: yes
 
     - name: Habilitando o Servico do Docker
       systemd:
         name: docker
         enabled: yes
-        state: started    
-  rescue:
-    - name: Download dos pacotes do Docker localmente
-      get_url:
-        url: "{{ docker_offline_url }}"
-        dest: ./roles/common/files/
-        validate_certs: no
-      delegate_to: localhost
-      
-    - name: Copiando os pacotes do Docker
-      unarchive:
-        src: docker-ce-1903.tgz
-        dest: /tmp/
-    
-    - name: Instalando os pacotes do Docker
-      yum:
-        name: "/tmp/docker-ce/{{ item }}"
-        state: present
-      loop: "{{ docker_offline.packages }}"
-    
-    - name: Habilitando o Servico do Docker
-      systemd:
-        name: docker
-        enabled: yes
         state: started
-    
-    - name: Removendo os pacotes de instalacao do Docker
-      file:
-        path: /tmp/docker-ce
-        state: absent
-  when:
-    - (ansible_os_family == 'RedHat')
+      ignore_errors: yes  

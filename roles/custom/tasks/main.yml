@@ -1,4 +1,254 @@
 ---
-- name: Custom
+- name: Aguardando o Zabbix Web
+  wait_for:
+    host: "{{ zabbix_server_ip }}"
+    port: "8080"
+    connect_timeout: 15
+    delay: 5
+    sleep: 5
+    active_connection_states: ["ESTABLISHED"]
+    state: started
+  register: zabbix_web_state
+
+- name: Zabbix Custom - Verificando as customizações do Zabbix
+  stat:
+    path: "/tmp/zabbix_custom.log"
+  register: zabbix_custom
+
+- name: Zabbix Custom
   block:
-    - include_tasks: custom.yml
+    - name: Token - Copiando o script para gerar o token
+      template:
+        src: "zbx_get_token_api.sh.j2"
+        dest: "/tmp/zbx_get_token_api.sh"
+        mode: "0755"
+
+    - name: Token - Gerando um token de autenticação
+      command:
+        cmd: bash /tmp/zbx_get_token_api.sh
+      register: zabbix_auth_token
+
+    - name: Token - Removendo Scripts Temporários de Customização
+      file:
+        path: "/tmp/zbx_get_token_api.sh"
+        state: absent
+
+
+# Slack Alerts
+    - name: Slack Alerts - Disponibilizando Scripts
+      template:
+        src: "{{ item }}.j2"
+        dest: "/tmp/{{ item }}"
+        mode: "0755"
+      loop: "{{ scripts_zbx_alertscripts }}"
+
+    - name: Slack Alerts - Copiando o script para o zabbix server
+      shell: >
+        docker cp "/tmp/slack_alerts.sh" {{ zabbix_server_container_name }}:"/usr/lib/zabbix/alertscripts/slack_alerts.sh"
+      register: slack_alerts
+
+    - name: Slack Alerts - Criando Media para Alerta
+      command:
+        cmd: bash /tmp/zbx_create_media.sh
+      register: slack_media
+
+    - name: Slack Alerts - Removendo Scripts Temporários
+      file:
+        path: "/tmp/{{ item }}"
+        state: absent
+      loop: "{{ scripts_zbx_alertscripts }}"
+
+    - name: Resultado da criação do Slack Alert
+      debug:
+        msg: "{{ slack_media.stdout }}"
+
+    - name: Slack Alerts - Configurando log
+      file:
+        path: "/tmp/zabbix_custom.log"
+        state: touch
+
+    - name: Slack Alerts - Gerando log
+      lineinfile:
+        path: "/tmp/zabbix_custom.log"
+        line: "Slack Alerts configurado"
+
+
+# Auto Registro Linux
+    - name: Auto Registro Linux - Copiando o script para gerar o auto regitro
+      template:
+        src: "zbx_auto_registration_linux_servers.sh.j2"
+        dest: "/tmp/zbx_auto_registration_linux_servers.sh"
+        mode: "0755"
+
+    - name: Auto Registro Linux - Criando Auto Registro de Servidores Linux
+      command:
+        cmd: bash /tmp/zbx_auto_registration_linux_servers.sh
+      register: zbx_auto_registration_linux_servers
+
+    - name: Auto Registro Linux - Resultado da criação do Auto Registro de Servidores Linux
+      debug:
+        msg: "{{ zbx_auto_registration_linux_servers.stdout }}"
+
+    - name: Auto Registro Linux - Removendo Scripts Temporários
+      file:
+        path: "/tmp/zbx_auto_registration_linux_servers.sh"
+        state: absent
+
+    - name: Auto Registro Windows - Copiando o script para gerar o auto regitro
+      template:
+        src: "zbx_auto_registration_windows_servers.sh.j2"
+        dest: "/tmp/zbx_auto_registration_windows_servers.sh"
+        mode: "0755"
+
+
+# Auto Registro Windows
+    - name: Auto Registro Windows - Criando Auto Registro de Servidores Windows
+      command:
+        cmd: bash /tmp/zbx_auto_registration_windows_servers.sh
+      register: zbx_auto_registration_windows_servers
+
+    - name: Resultado da criação do Auto Registro de Servidores Windows no Zabbix
+      debug:
+        msg: "{{ zbx_auto_registration_windows_servers.stdout }}"
+
+    - name: Auto Registro Windows - Removendo Scripts Temporários de Customização
+      file:
+        path: "/tmp/zbx_auto_registration_windows_servers.sh"
+        state: absent
+
+
+# Reporte de Problemas
+    - name: Reporte de Problemas - Copiando o script para gerar o reporte de problemas
+      template:
+        src: "zbx_report_problem_to_slack.sh.j2"
+        dest: "/tmp/zbx_report_problem_to_slack.sh"
+        mode: "0755"
+
+    - name: Reporte de Problemas - Criando Slack Reporte de Problemas
+      command:
+        cmd: bash /tmp/zbx_report_problem_to_slack.sh
+      register: zbx_report_problem_to_slack
+
+    - name: Resultado da criação do Slack Report de Problema
+      debug:
+        msg: "{{ zbx_report_problem_to_slack.stdout }}"
+
+    - name: Reporte de Problemas - Removendo Scripts Temporários
+      file:
+        path: "/tmp/zbx_report_problem_to_slack.sh"
+        state: absent
+  when:
+    - (zabbix_custom.stat.exists != true)
+
+
+# SSL Check
+- name: SSL Check - Verificando as customizações do Zabbix
+  stat:
+    path: "/tmp/ssl_check.log"
+  register: ssl_check
+
+- name: SSL Check
+  block:
+    - name: SSL Check - Disponibilizando Scripts
+      template:
+        src: "{{ item }}.j2"
+        dest: "/tmp/{{ item }}"
+        mode: "0755"
+      loop: "{{ scripts_zbx_externalscripts }}"
+
+    - name: SSL Check - Copiando os scripts para o zabbix server
+      shell: |
+        docker cp "/tmp/{{ item }}" {{ zabbix_server_container_name }}:"/usr/lib/zabbix/externalscripts/{{ item }}"
+      args:
+        executable: /bin/sh
+      register: ssl_check_copy
+      loop: "{{ scripts_zbx_externalscripts }}"
+
+    - name: SSL Check - Removendo Scripts Temporários de Customização
+      file:
+        path: "/tmp/{{ item }}"
+        state: absent
+      loop: "{{ scripts_zbx_externalscripts }}"
+
+    # Log
+    - name: SSL Check - Configurando log
+      file:
+        path: "/tmp/ssl_check.log"
+        state: touch
+
+    - name: SSL Check - Gerando log
+      lineinfile:
+        path: "/tmp/ssl_check.log"
+        line: "Scripts de SSL Check configurados"
+  when:
+    - (ssl_check.stat.exists != true)
+
+
+# AIX Check Itens
+- name: AIX - Verificando as customizações do Zabbix
+  stat:
+    path: "/tmp/aix_check.log"
+  register: aix_check
+
+- name: AIX
+  block:
+    #bpadapterfail
+    - name: Criação de Item - Copiando Script Adapterfail
+      template:
+        src: "aix_check_bpadapterfail.sh.j2"
+        dest: "/tmp/aix_check_bpadapterfail.sh"
+        mode: "0755"
+
+    - name: Criação de Item - Criando o Item Adapterfail
+      command:
+        cmd: bash /tmp/aix_check_bpadapterfail.sh
+      register: aix_check_bpadapterfail
+
+    - name: Criação de Item - Resultado da criação do Adapterfail
+      debug:
+        msg: "{{ aix_check_bpadapterfail.stdout }}"
+
+    - name: Criação de Item - Configurando log
+      file:
+        path: "/tmp/aix_check.log"
+        state: touch
+    
+    #bpbootlist
+    - name: Criação de Item - Copiando Script Bootlist
+      template:
+        src: "aix_check_bpbootlist.sh.j2"
+        dest: "/tmp/aix_check_bpbootlist.sh"
+        mode: "0755"
+
+    - name: Criação de Item - Criando o Item Bootlist
+      command:
+        cmd: bash /tmp/aix_check_bpbootlist.sh
+      register: aix_check_bpbootlist
+
+    - name: Criação de Item - Resultado da criação do Bootlist
+      debug:
+        msg: "{{ aix_check_bpbootlist.stdout }}"
+
+    # Log
+    - name: Criação de Item - Configurando log
+      file:
+        path: "/tmp/aix_check.log"
+        state: touch
+
+    - name: Criação de Item - Gerando log
+      lineinfile:
+        path: "/tmp/aix_check.log"
+        line: "Scripts de AIX Check configurados"
+
+    # Remoção
+    - name: Criação de Item - Removendo Scripts Adapterfail
+      file:
+        path: "/tmp/aix_check_bpadapterfail.sh"
+        state: absent
+
+    - name: Criação de Item - Removendo Scripts Bootlist
+      file:
+        path: "/tmp/aix_check_bpbootlist.sh"
+        state: absent
+  when:
+    - (aix_check.stat.exists != true)

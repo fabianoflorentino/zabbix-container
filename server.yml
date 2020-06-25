@@ -1,8 +1,8 @@
 ---
-- name: Serviço de Monitoramento Zabbix/Grafana em container docker
+- name: IBM - Serviço de Monitoramento com Zabbix + Grafana em Container Docker
   hosts:
     - server
-  gather_facts: true
+  gather_facts: True
   pre_tasks:
     - setup:
         gather_subset:

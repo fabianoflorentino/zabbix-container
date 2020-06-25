@@ -1,2 +1,32 @@
 ---
-- include: grafana.yml
+- name: Verificando se o container existe
+  docker_container_info:
+    name: "{{ grafana_container_name }}"
+  register: grafana_result
+
+- name: Grafana
+  block:
+    - name: Download da imagem
+      docker_image:
+        name: "{{ grafana_image }}"
+        source: pull
+
+    - name: Iniciando o Container
+      docker_container:
+        name: "{{ grafana_container_name }}"
+        image: "{{ grafana_image }}"
+        state: started
+        recreate: yes
+        restart: yes
+        restart_policy: unless-stopped
+        networks_cli_compatible: yes
+        networks:
+          - name: zabbix-stack
+        ports:
+          - "{{ grafana_port }}"
+  rescue:
+    - name:
+      debug:
+        msg: "Please check your internet connection"
+  when:
+    - (grafana_result.exists != true)
