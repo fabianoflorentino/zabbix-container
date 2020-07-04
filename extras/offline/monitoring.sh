@@ -141,6 +141,7 @@ function zabbix_web_nginx_mysql() {
             -e MYSQL_USER="zabbix" \
             -e MYSQL_PASSWORD="${ZABBIX_DB_PWD}" \
             -e MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PWD}" \
+            -e PHP_TZ="America/Sao_Paulo" \
             -p 8080:8080 \
             --link mysql-server:mysql \
             --link zabbix-server-mysql:zabbix-server \
