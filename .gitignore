@@ -2,4 +2,6 @@
 .vscode
 inventories/*
 !inventories/sample
-roles/agent/files/zabbix-agent-5.0.0-1.el7.x86_64.rpm
+roles/agent/files/*.rpm
+roles/web/files/*.tar
+roles/grafana/files/*.tar
