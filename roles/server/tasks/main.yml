@@ -68,3 +68,36 @@
         msg: "Please check your internet connection"
   when:
     - (zabbix_server_result.exists != true)
+
+- name: Zabbix Agent for Server
+  block:
+    - name: Zabbix Agent
+      docker_image:
+        name: "{{ zabbix_agent_image }}"
+        source: pull
+
+    - name: Inciando o container
+      docker_container:
+        name: "{{ zabbix_agent_container_name }}"
+        image: "{{ zabbix_agent_image }}"
+        state: started
+        restart: yes
+        recreate: yes
+        restart_policy: unless-stopped
+        networks_cli_compatible: yes
+        networks:
+          - name: zabbix-stack
+            links: "{{ zabbix_server_container_name }}:zabbix-server"
+        links:
+          - "{{ zabbix_server_container_name }}:zabbix-server-mysql"
+        env:
+          ZBX_METADATA: "{{ zabbix_host_metadata_linux }}"
+          ZBX_ACTIVE_ALLOW: "{{ zabbix_agent_active_allow }}"
+          ZBX_HOSTNAME: "{{ zabbix_agent_hostname }}"
+          ZBX_STARTAGENTS: "{{ zabbix_agent_startagents }}"
+  rescue:
+    - name:
+      debug:
+        msg: "Please check your internet connection"
+  when:
+    - (zabbix_server_result.exists != true)

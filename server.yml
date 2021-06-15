@@ -1,7 +1,7 @@
 ---
-- name: Serviço de Monitoramento com Zabbix + Grafana em Container Docker
+- name: IBM - Serviço de Monitoramento com Zabbix + Grafana em Container Docker
   hosts:
-    - server
+    - zabbix-server
   gather_facts: True
   pre_tasks:
     - setup:
@@ -11,7 +11,7 @@
           - 'network'
           - 'virtual'
   roles:
-    - {role: common,  tags: 'common'}
+    # - {role: common,  tags: 'common'}
     - {role: mysql,   tags: 'mysql'}
     - {role: server,  tags: 'zabbix_server'}
     - {role: web,     tags: 'zabbix_web'}

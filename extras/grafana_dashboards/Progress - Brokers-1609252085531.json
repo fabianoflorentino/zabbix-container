@@ -1,0 +1,840 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 3,
+  "iteration": 1609251061077,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "displayMode": "color-background",
+            "filterable": false
+          },
+          "mappings": [
+            {
+              "from": "",
+              "id": 1,
+              "text": "ATIVO",
+              "to": "",
+              "type": 1,
+              "value": "1"
+            },
+            {
+              "from": "",
+              "id": 2,
+              "text": "PROBLEMA",
+              "to": "",
+              "type": 1,
+              "value": "0"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "string"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "number"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 26,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.6",
+      "targets": [
+        {
+          "application": {
+            "filter": "Progress"
+          },
+          "functions": [],
+          "group": {
+            "filter": "$Group"
+          },
+          "host": {
+            "filter": "$Host"
+          },
+          "item": {
+            "filter": "$Broker"
+          },
+          "options": {
+            "showDisabledItems": false,
+            "skipEmptyValues": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": 0,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Status Broker",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Field": "Broker",
+              "Last (not null)": "Status"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "AIX Servers",
+          "value": "AIX Servers"
+        },
+        "datasource": "Zabbix",
+        "definition": "Zabbix - group",
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "Group",
+        "multi": false,
+        "name": "Group",
+        "options": [
+          {
+            "selected": true,
+            "text": "AIX Servers",
+            "value": "AIX Servers"
+          }
+        ],
+        "query": {
+          "application": "",
+          "group": "/AIX/",
+          "host": "",
+          "item": "",
+          "queryType": "group"
+        },
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "CURITIBA",
+          "value": "CURITIBA"
+        },
+        "datasource": "Zabbix",
+        "definition": "Zabbix - host",
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "Host",
+        "multi": false,
+        "name": "Host",
+        "options": [
+          {
+            "selected": true,
+            "text": "CURITIBA",
+            "value": "CURITIBA"
+          },
+          {
+            "selected": false,
+            "text": "qualiweb",
+            "value": "qualiweb"
+          }
+        ],
+        "query": {
+          "application": "",
+          "group": "$Group",
+          "host": "/.*/",
+          "item": "",
+          "queryType": "host"
+        },
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "tags": [],
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "Zabbix",
+        "definition": "Zabbix - item",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Broker",
+        "multi": true,
+        "name": "Broker",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - ctb33bat",
+            "value": "Check Broker - ctb33bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - ctb33pro1",
+            "value": "Check Broker - ctb33pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - ctb33pro2",
+            "value": "Check Broker - ctb33pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int13pro1",
+            "value": "Check Broker - int13pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int24pro1",
+            "value": "Check Broker - int24pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int24pro2",
+            "value": "Check Broker - int24pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int24wsr1",
+            "value": "Check Broker - int24wsr1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int24wsr2",
+            "value": "Check Broker - int24wsr2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int27pro1",
+            "value": "Check Broker - int27pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int27pro2",
+            "value": "Check Broker - int27pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int27wsr1",
+            "value": "Check Broker - int27wsr1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int27wsr2",
+            "value": "Check Broker - int27wsr2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int33ctb1",
+            "value": "Check Broker - int33ctb1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int33ctb2",
+            "value": "Check Broker - int33ctb2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int3pro1",
+            "value": "Check Broker - int3pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int3pro2",
+            "value": "Check Broker - int3pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int3pro3",
+            "value": "Check Broker - int3pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int59pro1",
+            "value": "Check Broker - int59pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int59pro2",
+            "value": "Check Broker - int59pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int59wsr1",
+            "value": "Check Broker - int59wsr1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int65pro1",
+            "value": "Check Broker - int65pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int65pro2",
+            "value": "Check Broker - int65pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int65pro3",
+            "value": "Check Broker - int65pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int65pro4",
+            "value": "Check Broker - int65pro4"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int65pro5",
+            "value": "Check Broker - int65pro5"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int65wsr1",
+            "value": "Check Broker - int65wsr1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int66pro1",
+            "value": "Check Broker - int66pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int66pro2",
+            "value": "Check Broker - int66pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int66pro3",
+            "value": "Check Broker - int66pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int66pro4",
+            "value": "Check Broker - int66pro4"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int66pro5",
+            "value": "Check Broker - int66pro5"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int66wsr1",
+            "value": "Check Broker - int66wsr1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int6pro1",
+            "value": "Check Broker - int6pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int6pro2",
+            "value": "Check Broker - int6pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int99pro1",
+            "value": "Check Broker - int99pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int99pro2",
+            "value": "Check Broker - int99pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int99pro3",
+            "value": "Check Broker - int99pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int99pro4",
+            "value": "Check Broker - int99pro4"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int99pro5",
+            "value": "Check Broker - int99pro5"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - int99wsr1",
+            "value": "Check Broker - int99wsr1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb13app1",
+            "value": "Check Broker - rhweb13app1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb13app2",
+            "value": "Check Broker - rhweb13app2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb13app3",
+            "value": "Check Broker - rhweb13app3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb13bat",
+            "value": "Check Broker - rhweb13bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb13pro1",
+            "value": "Check Broker - rhweb13pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb13pro2",
+            "value": "Check Broker - rhweb13pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb24app1",
+            "value": "Check Broker - rhweb24app1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb24app2",
+            "value": "Check Broker - rhweb24app2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb24bat",
+            "value": "Check Broker - rhweb24bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb24pro1",
+            "value": "Check Broker - rhweb24pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb24pro2",
+            "value": "Check Broker - rhweb24pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb27app1",
+            "value": "Check Broker - rhweb27app1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb27app2",
+            "value": "Check Broker - rhweb27app2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb27app3",
+            "value": "Check Broker - rhweb27app3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb27bat",
+            "value": "Check Broker - rhweb27bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb27pro1",
+            "value": "Check Broker - rhweb27pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb27pro2",
+            "value": "Check Broker - rhweb27pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3app1",
+            "value": "Check Broker - rhweb3app1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3app2",
+            "value": "Check Broker - rhweb3app2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3bat",
+            "value": "Check Broker - rhweb3bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3bunch1",
+            "value": "Check Broker - rhweb3bunch1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3bunch2",
+            "value": "Check Broker - rhweb3bunch2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3pro1",
+            "value": "Check Broker - rhweb3pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb3pro2",
+            "value": "Check Broker - rhweb3pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb59app1",
+            "value": "Check Broker - rhweb59app1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb59app2",
+            "value": "Check Broker - rhweb59app2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb59bat",
+            "value": "Check Broker - rhweb59bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb59pro1",
+            "value": "Check Broker - rhweb59pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb59pro2",
+            "value": "Check Broker - rhweb59pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb65bat",
+            "value": "Check Broker - rhweb65bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb65pro1",
+            "value": "Check Broker - rhweb65pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb65pro2",
+            "value": "Check Broker - rhweb65pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb65pro3",
+            "value": "Check Broker - rhweb65pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb65pro4",
+            "value": "Check Broker - rhweb65pro4"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb65pro5",
+            "value": "Check Broker - rhweb65pro5"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb66bat",
+            "value": "Check Broker - rhweb66bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb66pro1",
+            "value": "Check Broker - rhweb66pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb66pro2",
+            "value": "Check Broker - rhweb66pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb66pro3",
+            "value": "Check Broker - rhweb66pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb66pro4",
+            "value": "Check Broker - rhweb66pro4"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb66pro5",
+            "value": "Check Broker - rhweb66pro5"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb6app1",
+            "value": "Check Broker - rhweb6app1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb6app2",
+            "value": "Check Broker - rhweb6app2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb6bat",
+            "value": "Check Broker - rhweb6bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb6des",
+            "value": "Check Broker - rhweb6des"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb6pro1",
+            "value": "Check Broker - rhweb6pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb6pro2",
+            "value": "Check Broker - rhweb6pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb99bat",
+            "value": "Check Broker - rhweb99bat"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb99pro1",
+            "value": "Check Broker - rhweb99pro1"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb99pro2",
+            "value": "Check Broker - rhweb99pro2"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb99pro3",
+            "value": "Check Broker - rhweb99pro3"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb99pro4",
+            "value": "Check Broker - rhweb99pro4"
+          },
+          {
+            "selected": false,
+            "text": "Check Broker - rhweb99pro5",
+            "value": "Check Broker - rhweb99pro5"
+          }
+        ],
+        "query": {
+          "application": "Progress",
+          "group": "$Group",
+          "host": "$Host",
+          "item": "/Broker/",
+          "queryType": "item"
+        },
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "tags": [],
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "Zabbix",
+        "definition": "Zabbix - itemValues",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Status",
+        "multi": true,
+        "name": "Status",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "0",
+            "value": "0"
+          },
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          }
+        ],
+        "query": {
+          "application": "Progress",
+          "group": "$Group",
+          "host": "$Host",
+          "item": "$Broker",
+          "queryType": "itemValues"
+        },
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Progress - Brokers",
+  "uid": "Nq9D7_bGk",
+  "version": 5
+}

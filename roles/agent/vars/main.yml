@@ -1,11 +1,11 @@
 ---
 # Packages
-zabbix_agent_rpm_package: "https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-agent-5.0.0-1.el7.x86_64.rpm"
+zabbix_agent_rpm_package: "https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-agent-4.0.20-1.el7.x86_64.rpm"
 zabbix_agent_msi_package: "https://www.zabbix.com/downloads/4.0.17/zabbix_agent-4.0.17-windows-amd64-openssl.msi"
 zabbix_agent_pwc_package: "https://www.zabbix.com/downloads/3.4.0/zabbix_agent-3.4.0-aix-7.1-powerpc.tar.gz"
 
 # Linux
-zabbix_agent_package_linux: "zabbix-agent-5.0.0-1.el7.x86_64.rpm"
+zabbix_agent_package_linux: "zabbix-agent-4.0.20-1.el7.x86_64.rpm"
 zabbix_host_metadata_linux: "Linux Servers 41e8903a14830a2ebb4c6f95326b75555247a3e2da9336105537b615fc59449c"
 
 # Windows

@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 PLUGIN_NAME="
-alexanderzobnin-zabbix-app,
 grafana-clock-panel,
 grafana-simple-json-datasource,
-grafana-worldmap-panel
+grafana-worldmap-panel,
+alexanderzobnin-zabbix-app,
+ibm-apm-datasource
 "
 
-docker build -t monitoring/grafana:v0.0.1 \
+docker build --no-cache -t brgtsisdt3ptf001/grafana \
 --build-arg "GRAFANA_VERSION=latest" \
 --build-arg "GF_INSTALL_PLUGINS=${PLUGIN_NAME}" \
 -f grafana.Dockerfile .

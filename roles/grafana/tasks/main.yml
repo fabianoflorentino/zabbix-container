@@ -22,6 +22,9 @@
         networks_cli_compatible: yes
         networks:
           - name: zabbix-stack
+            links: "{{ zabbix_web_container_name }}:zabbix-console-web"
+        links:
+          - "{{ zabbix_web_container_name }}:zabbix-console-web"
         ports:
           - "{{ grafana_port }}"
   rescue:

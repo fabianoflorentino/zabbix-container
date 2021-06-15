@@ -1,17 +1,8 @@
-# **Serviço de Monitoramento com Zabbix + Grafana em Container Docker**
+# **Install and Configure System Monitoring with Zabbix on Docker Container**
 
-**Descrição:**
-Conjuto de roles ansible para instalar, configurar e customizar o monitoramento zabbix com grafana.
+## **Requirements**
 
-## **Roles**
-
-```bash
-./roles
-├── agent
-├── common
-├── custom
-├── grafana
-├── mysql
-├── server
-└── web
-```
+* Server  
+  * Redhat Operation System Family
+  * SSH Access
+  * Docker 19.03+
