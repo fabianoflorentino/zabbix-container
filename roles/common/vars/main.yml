@@ -8,8 +8,8 @@ packages:
     - device-mapper-persistent-data
     - lvm2
     - python2-pip
-    - python-devel
+    - https://cbs.centos.org/kojifiles/packages/python-docker/2.5.1/2.el7/noarch/python2-docker-2.5.1-2.el7.noarch.rpm
 
 pip:
   to_install:
-    - docker
+    - 'docker==4.4.4'
