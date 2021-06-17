@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+{
+    curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix_web_port }}/api_jsonrpc.php' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "jsonrpc": "2.0",
+        "method": "host.delete",
+        "id": 1,
+        "auth": "{{ zabbix_auth_token.stdout }}",
+        "params": [
+            "{{ zabbix_host_id.stdout }}"
+        ]
+    }'
+}

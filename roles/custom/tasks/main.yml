@@ -32,7 +32,23 @@
       file:
         path: "/tmp/zbx_get_token_api.sh"
         state: absent
+    
+    #HostID
+    - name: HostID - Copiando o script para gerar o hostid
+      template:
+        src: "zbx_get_host.sh.j2"
+        dest: "/tmp/zbx_get_host.sh"
+        mode: "0755"
 
+    - name: HostID - Gerando um token de autenticação
+      command:
+        cmd: bash /tmp/zbx_get_host.sh
+      register: zabbix_host_id
+
+    - name: HostID - Removendo Scripts Temporários de Customização
+      file:
+        path: "/tmp/zbx_get_host.sh"
+        state: absent
 
 # Slack Alerts
     - name: Slack Alerts - Disponibilizando Scripts
@@ -252,3 +268,40 @@
         state: absent
   when:
     - (aix_check.stat.exists != true)
+
+
+# HostID
+- name: HostID - Verificando as customizações do Zabbix
+  stat:
+    path: "/tmp/hostid.log"
+  register: hostid_check
+
+- name: HostID
+  block:
+    - name: HostID - Configurando log
+      file:
+        path: "/tmp/hostid_check.log"
+        state: touch
+
+    - name: Removendo Primeiro Registro Zabbix server - Copiando Script
+      template:
+        src: "zbx_del_first_zbxsrv.sh.j2"
+        dest: "/tmp/zbx_del_first_zbxsrv.sh"
+        mode: "0755"
+    
+    - name: Removendo Primeiro Registro Zabbix server - Deletando o Primeiro Registro "Zabbix server"
+      command:
+        cmd: bash /tmp/zbx_del_first_zbxsrv.sh
+      register: zbx_del_first_zbxsrv
+    
+    - name: Removendo Primeiro Registro Zabbix server - Resultado da remoção
+      debug:
+        msg: "{{ zbx_del_first_zbxsrv }}"
+    
+    # Remoção
+    - name: HostID - Removendo Scripts zbx_del_first_zbxsrv
+      file:
+        path: "/tmp/zbx_del_first_zbxsrv.sh"
+        state: absent
+  when:
+    - (hostid_check.stat.exists != true)

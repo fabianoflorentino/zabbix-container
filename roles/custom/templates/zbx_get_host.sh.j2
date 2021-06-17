@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+ZABBIX_API_URL="http://{{ zabbix_server_ip }}:{{ zabbix_web_port }}/api_jsonrpc.php"
+ZABBIX_JSON_DATA='{"jsonrpc": "2.0","method": "host.get","params": {"filter": {"host": ["{{ first_zabbix_server }}"]}},"auth": "{{ zabbix_auth_token.stdout }}","id": 1}'
+ZABBIX_CONTENT_TYPE="Content-Type: application/json"
+GET_HOST_ID="/tmp/hostid.out"
+
+{
+
+    curl --silent --location --request POST ${ZABBIX_API_URL} --header "${ZABBIX_CONTENT_TYPE}" --data "${ZABBIX_JSON_DATA}" > ${GET_HOST_ID}
+    HOSTID=$(cat ${GET_HOST_ID} | python -m json.tool |grep '"hostid":' |awk '{ print $2 }' |cut -d"\"" -f2)
+
+} &> /dev/null && echo -e "${HOSTID}"
+
+rm -rf ${GET_HOST_ID}
