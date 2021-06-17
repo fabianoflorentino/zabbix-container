@@ -30,15 +30,12 @@
         name:  "{{ item }}"
         state: present
       loop: "{{ packages.to_install }}"
-      ignore_errors: yes
 
     - name: Modulo Pip
       pip:
         name:
-          - pip
-          - docker
-        extra_args: --upgrade
-      ignore_errors: yes
+          - "{{ item }}"
+      loop: "{{ pip.to_install }}"
 
 - name: Docker
   block:
