@@ -1,7 +1,7 @@
 ---
 # Grafana
 grafana_container_name: "grafana"
-grafana_image: "brgtsisdt3ptf001/grafana"
-grafana_image_tar: "brgtsisdt3ptf001-grafana.tar"
+grafana_image: "fabianoflorentino/grafana"
+grafana_image_tar: "fabianoflorentino-grafana.tar"
 grafana_file_dest: "/tmp/{{ grafana_image_tar }}"
 grafana_port: "3000:3000"

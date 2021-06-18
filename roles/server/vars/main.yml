@@ -2,8 +2,8 @@
 # Zabbix Server
 zabbix_server_cachesize: "512M"
 zabbix_server_container_name: "zabbix-server-mysql"
-zabbix_server_image: "brgtsisdt3ptf001/zabbix-server-mysql"
-zabbix_server_image_tar: "brgtsisdt3ptf001-zabbix-server-mysql.tar"
+zabbix_server_image: "fabianoflorentino/zabbix-server-mysql"
+zabbix_server_image_tar: "fabianoflorentino-zabbix-server-mysql.tar"
 zabbix_server_file_dest: "/tmp/{{ zabbix_server_image_tar }}"
 zabbix_server_ports: "10051:10051"
 zabbix_server_db_host: "mysql-server"

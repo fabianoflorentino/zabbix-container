@@ -8,7 +8,7 @@ alexanderzobnin-zabbix-app,
 ibm-apm-datasource
 "
 
-docker build --no-cache -t brgtsisdt3ptf001/grafana \
+docker build --no-cache -t fabianoflorentino/grafana \
 --build-arg "GRAFANA_VERSION=latest" \
 --build-arg "GF_INSTALL_PLUGINS=${PLUGIN_NAME}" \
 -f grafana.Dockerfile .

@@ -1,8 +1,8 @@
 ---
 # MySQL
 mysql_container_name: "mysql-server"
-mysql_image: "brgtsisdt3ptf001/mysql"
-mysql_image_tar: "brgtsisdt3ptf001-mysql.tar"
+mysql_image: "fabianoflorentino/mysql"
+mysql_image_tar: "fabianoflorentino-mysql.tar"
 mysql_file_dest: "/tmp/{{ mysql_image_tar }}"
 mysql_zbx_db: "zabbix"
 mysql_zbx_db_user: "zabbix"

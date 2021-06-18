@@ -8,11 +8,11 @@ grafana
 "
 
 CONTAINER_IMAGES="
-brgtsisdt3ptf001/mysql:latest
-brgtsisdt3ptf001/zabbix-server-mysql:latest
-brgtsisdt3ptf001/zabbix-web-nginx-mysql:latest
-brgtsisdt3ptf001/grafana:latest
-brgtsisdt3ptf001/orazabbix:latest
+fabianoflorentino/mysql:latest
+fabianoflorentino/zabbix-server-mysql:latest
+fabianoflorentino/zabbix-web-nginx-mysql:latest
+fabianoflorentino/grafana:latest
+fabianoflorentino/orazabbix:latest
 "
 
 
@@ -65,15 +65,15 @@ function docker_pull() {
         echo -e "\nPor favor instale o Docker na sua máquina - https://www.docker.com/get-started\n"
     else
         echo -e "\nCarregando as imagens localmente aguarde.........OK!\n" \
-        && docker pull brgtsisdt3ptf001/mysql > /dev/null \
+        && docker pull fabianoflorentino/mysql > /dev/null \
         && echo -e "Carregando a imagem localmente MySQL Server......OK!" \
-        && docker pull brgtsisdt3ptf001/zabbix-server-mysql > /dev/null \
+        && docker pull fabianoflorentino/zabbix-server-mysql > /dev/null \
         && echo -e "Carregando a imagem localmente Zabbix Server.....OK!" \
-        && docker pull brgtsisdt3ptf001/zabbix-web-nginx-mysql > /dev/null \
+        && docker pull fabianoflorentino/zabbix-web-nginx-mysql > /dev/null \
         && echo -e "Carregando a imagem localmente Zabbix Web........OK!" \
-        && docker pull brgtsisdt3ptf001/grafana > /dev/null \
+        && docker pull fabianoflorentino/grafana > /dev/null \
         && echo -e "Carregando a imagem localmente Grafana...........OK!" \
-        && docker pull brgtsisdt3ptf001/orazabbix > /dev/null \
+        && docker pull fabianoflorentino/orazabbix > /dev/null \
         && echo -e "Carregando a imagem localmente Orazabbix.........OK!\n"
     fi
 
@@ -81,26 +81,26 @@ function docker_pull() {
 
 function docker_save() {
 
-    docker save -o ./brgtsisdt3ptf001-mysql.tar brgtsisdt3ptf001/mysql \
+    docker save -o ./fabianoflorentino-mysql.tar fabianoflorentino/mysql \
     && echo -e "\nSavando a imagem localmente MySQL Server......OK!" \
-    && docker save -o ./brgtsisdt3ptf001-zabbix-server-mysql.tar brgtsisdt3ptf001/zabbix-server-mysql \
+    && docker save -o ./fabianoflorentino-zabbix-server-mysql.tar fabianoflorentino/zabbix-server-mysql \
     && echo -e "Savando a imagem localmente Zabbix Server.....OK!" \
-    && docker save -o ./brgtsisdt3ptf001-zabbix-web-nginx-mysql.tar brgtsisdt3ptf001/zabbix-web-nginx-mysql \
+    && docker save -o ./fabianoflorentino-zabbix-web-nginx-mysql.tar fabianoflorentino/zabbix-web-nginx-mysql \
     && echo -e "Savando a imagem localmente Zabbix Web........OK!" \
-    && docker save -o ./brgtsisdt3ptf001-grafana.tar brgtsisdt3ptf001/grafana \
+    && docker save -o ./fabianoflorentino-grafana.tar fabianoflorentino/grafana \
     && echo -e "Savando a imagem localmente Grafana...........OK!" \
-    && docker save -o ./brgtsisdt3ptf001-orazabbix.tar brgtsisdt3ptf001/orazabbix \
+    && docker save -o ./fabianoflorentino-orazabbix.tar fabianoflorentino/orazabbix \
     && echo -e "Savando a imagem localmente Orazabbix.........OK!\n"
 
 }
 
 function docker_load() {
     
-    docker load -q -i ./brgtsisdt3ptf001-mysql.tar \
-    && docker load -q -i ./brgtsisdt3ptf001-zabbix-server-mysql.tar \
-    && docker load -q -i ./brgtsisdt3ptf001-zabbix-web-nginx-mysql.tar \
-    && docker load -q -i ./brgtsisdt3ptf001-grafana.tar \
-    && docker load -q -i ./brgtsisdt3ptf001-orazabbix.tar
+    docker load -q -i ./fabianoflorentino-mysql.tar \
+    && docker load -q -i ./fabianoflorentino-zabbix-server-mysql.tar \
+    && docker load -q -i ./fabianoflorentino-zabbix-web-nginx-mysql.tar \
+    && docker load -q -i ./fabianoflorentino-grafana.tar \
+    && docker load -q -i ./fabianoflorentino-orazabbix.tar
 
 }
 
@@ -113,7 +113,7 @@ function mysql_server() {
             -e MYSQL_USER="zabbix" \
             -e MYSQL_PASSWORD="${ZABBIX_DB_PWD}" \
             -e MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PWD}" \
-            brgtsisdt3ptf001/mysql:latest \
+            fabianoflorentino/mysql:latest \
             --character-set-server=utf8 --collation-server=utf8_bin
 
     } &> /dev/null && echo -e "\nIniciando MySQL Server.....OK!"
@@ -144,7 +144,7 @@ function zabbix_server_mysql() {
             -e ZBX_CACHESIZE=2048M \
             -p 10051:10051 \
             --link mysql-server:mysql \
-            brgtsisdt3ptf001/zabbix-server-mysql:latest
+            fabianoflorentino/zabbix-server-mysql:latest
 
     } &> /dev/null && echo -e "Iniciando Zabbix Server.....OK!"
 
@@ -164,7 +164,7 @@ function zabbix_web_nginx_mysql() {
             -p 8080:8080 \
             --link mysql-server:mysql \
             --link zabbix-server-mysql:zabbix-server \
-            brgtsisdt3ptf001/zabbix-web-nginx-mysql:latest
+            fabianoflorentino/zabbix-web-nginx-mysql:latest
     
     } &> /dev/null && echo -e "Iniciando Zabbix Web.....OK!"
 
@@ -178,7 +178,7 @@ function grafana() {
         docker run -d -t --restart unless-stopped --name grafana \
         --link zabbix-web-nginx-mysql:zabbix-web-nginx-mysql \
         -p 3000:3000 \
-        brgtsisdt3ptf001/grafana:latest
+        fabianoflorentino/grafana:latest
     
     } &> /dev/null && echo -e "Iniciando Grana.....OK!\n"
 
