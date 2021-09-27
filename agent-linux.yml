@@ -1,5 +1,5 @@
 ---
-- name: IBM - Instalação e Configuração do Zabbix Agent
+- name: Instalação e Configuração do Zabbix Agent
   hosts:
     - agent_linux
   gather_facts: True
