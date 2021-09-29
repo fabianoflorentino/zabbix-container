@@ -4,6 +4,7 @@
 
 ### **Zabbix Server**
 
+* [x] Hardware: [Zabbix Documentation](https://www.zabbix.com/documentation/5.0/manual/installation/requirements)
 * [x] Internet Access
 * [x] Redhat Operation System Family
 * [x] SSH Access
