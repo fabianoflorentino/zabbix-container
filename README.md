@@ -159,3 +159,12 @@ ansible-playbook -i inventories/lab/hosts.yml -u root -k zabbix-server.yml
 * [x] Removendo Primeiro Registro Zabbix server - Deletando o Primeiro Registro "Zabbix server"
 * [x] Removendo Primeiro Registro Zabbix server - Resultado da remoção
 * [x] HostID - Removendo Scripts zbx_del_first_zbxsrv
+
+## **Screenshots**
+
+![img1](./docs/img/img1.png)
+![img2](./docs/img/img2.png)
+![img3](./docs/img/img3.png)
+![img4](./docs/img/img4.png)
+![img5](./docs/img/img5.png)
+![img6](./docs/img/img6.png)
