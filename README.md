@@ -8,7 +8,8 @@
   * Docker 19.03+
   * ansible 2.9.21+
 
-### **Zabbix Server**
+<details>
+  <summary><b>Zabbix Server</b> <em>(Details)</em></summary>
 
 Create new inventory:
 
@@ -168,3 +169,9 @@ ansible-playbook -i inventories/lab/hosts.yml -u root -k zabbix-server.yml
 ![img4](./docs/img/img4.png)
 ![img5](./docs/img/img5.png)
 ![img6](./docs/img/img6.png)
+
+</details>
+
+<details>
+    <summary><b>Zabbix Agent</b> <em>(Details)</em></summary>
+</details>
