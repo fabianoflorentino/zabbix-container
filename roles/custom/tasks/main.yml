@@ -110,14 +110,14 @@
         path: "/tmp/zbx_auto_registration_linux_servers.sh"
         state: absent
 
+
+# Auto Registro Windows
     - name: Auto Registro Windows - Copiando o script para gerar o auto regitro
       template:
         src: "zbx_auto_registration_windows_servers.sh.j2"
         dest: "/tmp/zbx_auto_registration_windows_servers.sh"
         mode: "0755"
 
-
-# Auto Registro Windows
     - name: Auto Registro Windows - Criando Auto Registro de Servidores Windows
       command:
         cmd: bash /tmp/zbx_auto_registration_windows_servers.sh
