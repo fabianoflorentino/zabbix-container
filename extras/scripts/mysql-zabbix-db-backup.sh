@@ -2,7 +2,12 @@
 
 DATA=$(date --date='5 days ago' "+%Y/%m/%d")
 TIME_STAMP=$(date -d "${DATA} 21:00:00" +"%s")
-ZABBIX_DB_PASSWORD=$(docker inspect zabbix-server-mysql |grep MYSQL_PASSWORD |cut -d"=" -f2 |cut -d"\"" -f1)
+INSPECT_ZABBIX_SERVER=$(docker container inspect zabbix-server-mysql)
+ZABBIX_DB_PASSWORD=$(docker container inspect zabbix-server-mysql \
+        |grep -i "MYSQL_PASSWORD=" \
+        |awk -F "\"," '{ print $1 }' \
+        |awk -F "MYSQL_PASSWORD=" '{ print $2 }'
+)
 
 if test ! -z "${DATA}"
 then
