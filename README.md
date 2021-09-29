@@ -11,6 +11,10 @@
 * [x] Docker 19.03+
 * [x] Ansible 2.9.21+
 
+## **Recomendations**
+
+* [x] [Best practices for secure Zabbix setup](https://www.zabbix.com/documentation/5.0/manual/installation/requirements/best_practices)
+
 ## **Attention**
 
 The images are based on my public [Docker Hub - fabianoflorentino](https://hub.docker.com/u/fabianoflorentino).
