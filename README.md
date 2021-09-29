@@ -66,90 +66,96 @@ ansible-playbook -i inventories/lab/hosts.yml -u root -k zabbix-server.yml
 
 #### **Roles**
 
-**common**
-[x] Ajustando o Hostname
-[x] Atualizando /etc/hosts
-[x] Habilitando IP Forward
-[x] Atulizando o Sistema
-[x] Instalando pacotes essenciais
-[x] Modulo Pip
-[x] Verificando pre requisitos
-[x] Verificando se o repositorio Docker existe
-[x] Habilitando o repositorio do Docker
-[x] Instalando o Docker
-[x] Habilitando o Servico do Docker
+#### **common**
 
-**mysql**
-[x] Verificando se o container existe
-[x] Download da imagem
-[x] Criando Network
-[x] Criando volume
-[x] Iniciando o Container
+* [x] Ajustando o Hostname
+* [x] Atualizando /etc/hosts
+* [x] Habilitando IP Forward
+* [x] Atulizando o Sistema
+* [x] Instalando pacotes essenciais
+* [x] Modulo Pip
+* [x] Verificando pre requisitos
+* [x] Verificando se o repositorio Docker existe
+* [x] Habilitando o repositorio do Docker
+* [x] Instalando o Docker
+* [x] Habilitando o Servico do Docker
 
-**server**
-[x] Verificando se o container existe
-[x] Download da imagem
-[x] Criando volume
-[x] Iniciando o Container (server)
-[x] Zabbix Agent
-[x] Iniciando o Container (agent)
+#### **mysql**
 
-**web**
-[x] Verificando se o container existe (web)
-[x] Download da imagem (web)
-[x] Criando volume (web)
-[x] Iniciando o Container (web)
+* [x] Verificando se o container existe
+* [x] Download da imagem
+* [x] Criando Network
+* [x] Criando volume
+* [x] Iniciando o Container
 
-**grafana**
-[x] Verificando se o container existe (grafana)
-[x] Download da imagem (grafana)
-[x] Iniciando o Container (grafana)
+#### **server**
 
-**custom**
-[x] Aguardando o Zabbix Web
-[x] Zabbix Custom - Verificando as customizações do Zabbix
-[x] Token - Copiando o script para gerar o token
-[x] Token - Gerando um token de autenticação
-[x] Token - Removendo Scripts Temporários de Customização
-[x] HostID - Copiando o script para gerar o hostid
-[x] HostID - Gerando um token de autenticação
-[x] HostID - Removendo Scripts Temporários de Customização
-[x] Slack Alerts - Disponibilizando Scripts
-[x] Slack Alerts - Copiando o script para o zabbix server
-[x] Slack Alerts - Criando Media para Alerta
-[x] Slack Alerts - Removendo Scripts Temporários
-[x] Resultado da criação do Slack Alert
-[x] Slack Alerts - Configurando log
-[x] Slack Alerts - Gerando log
-[x] Auto Registro Linux - Copiando o script para gerar o auto regitro
-[x] Auto Registro Linux - Criando Auto Registro de Servidores Linux
-[x] Auto Registro Linux - Resultado da criação do Auto Registro de Servidores Linux
-[x] Auto Registro Linux - Removendo Scripts Temporários
-[x] Auto Registro Windows - Copiando o script para gerar o auto regitro
-[x] Auto Registro Windows - Criando Auto Registro de Servidores Windows
-[x] Resultado da criação do Auto Registro de Servidores Windows no Zabbix
-[x] Auto Registro Windows - Removendo Scripts Temporários de Customização
-[x] Reporte de Problemas - Copiando o script para gerar o reporte de problemas
-[x] Reporte de Problemas - Criando Slack Reporte de Problemas
-[x] Resultado da criação do Slack Report de Problema
-[x] Reporte de Problemas - Removendo Scripts Temporários
-[x] SSL Check - Disponibilizando Scripts
-[x] SSL Check - Copiando os scripts para o zabbix server
-[x] SSL Check - Removendo Scripts Temporários de Customização
-[x] SSL Check - Configurando log
-[x] SSL Check - Gerando log
-[x] Criação de Item - Copiando Script Adapterfail
-[x] Criação de Item - Criando o Item Adapterfail
-[x] Criação de Item - Resultado da criação do Adapterfail
-[x] Criação de Item - Configurando log
-[x] Criação de Item - Copiando Script Bootlist
-[x] Criação de Item - Resultado da criação do Bootlist
-[x] Criação de Item - Configurando log
-[x] Criação de Item - Gerando log
-[x] Criação de Item - Removendo Scripts Adapterfail
-[x] Criação de Item - Removendo Scripts Bootlist
-[x] HostID - Configurando log
-[x] Removendo Primeiro Registro Zabbix server - Copiando Script
-[x] Removendo Primeiro Registro Zabbix server - Deletando o Primeiro Registro "Zabbix server"
-[x] Removendo Primeiro Registro Zabbix server - Resultado da remoção
-[x] HostID - Removendo Scripts zbx_del_first_zbxsrv
+* [x] Verificando se o container existe
+* [x] Download da imagem
+* [x] Criando volume
+* [x] Iniciando o Container (server)
+* [x] Zabbix Agent
+* [x] Iniciando o Container (agent)
+
+#### **web**
+
+* [x] Verificando se o container existe (web)
+* [x] Download da imagem (web)
+* [x] Criando volume (web)
+* [x] Iniciando o Container (web)
+
+#### **grafana**
+
+* [x] Verificando se o container existe (grafana)
+* [x] Download da imagem (grafana)
+* [x] Iniciando o Container (grafana)
+
+#### **custom**
+
+* [x] Aguardando o Zabbix Web
+* [x] Zabbix Custom - Verificando as customizações do Zabbix
+* [x] Token - Copiando o script para gerar o token
+* [x] Token - Gerando um token de autenticação
+* [x] Token - Removendo Scripts Temporários de Customização
+* [x] HostID - Copiando o script para gerar o hostid
+* [x] HostID - Gerando um token de autenticação
+* [x] HostID - Removendo Scripts Temporários de Customização
+* [x] Slack Alerts - Disponibilizando Scripts
+* [x] Slack Alerts - Copiando o script para o zabbix server
+* [x] Slack Alerts - Criando Media para Alerta
+* [x] Slack Alerts - Removendo Scripts Temporários
+* [x] Resultado da criação do Slack Alert
+* [x] Slack Alerts - Configurando log
+* [x] Slack Alerts - Gerando log
+* [x] Auto Registro Linux - Copiando o script para gerar o auto regitro
+* [x] Auto Registro Linux - Criando Auto Registro de Servidores Linux
+* [x] Auto Registro Linux - Resultado da criação do Auto Registro de Servidores Linux
+* [x] Auto Registro Linux - Removendo Scripts Temporários
+* [x] Auto Registro Windows - Copiando o script para gerar o auto regitro
+* [x] Auto Registro Windows - Criando Auto Registro de Servidores Windows
+* [x] Resultado da criação do Auto Registro de Servidores Windows no Zabbix
+* [x] Auto Registro Windows - Removendo Scripts Temporários de Customização
+* [x] Reporte de Problemas - Copiando o script para gerar o reporte de problemas
+* [x] Reporte de Problemas - Criando Slack Reporte de Problemas
+* [x] Resultado da criação do Slack Report de Problema
+* [x] Reporte de Problemas - Removendo Scripts Temporários
+* [x] SSL Check - Disponibilizando Scripts
+* [x] SSL Check - Copiando os scripts para o zabbix server
+* [x] SSL Check - Removendo Scripts Temporários de Customização
+* [x] SSL Check - Configurando log
+* [x] SSL Check - Gerando log
+* [x] Criação de Item - Copiando Script Adapterfail
+* [x] Criação de Item - Criando o Item Adapterfail
+* [x] Criação de Item - Resultado da criação do Adapterfail
+* [x] Criação de Item - Configurando log
+* [x] Criação de Item - Copiando Script Bootlist
+* [x] Criação de Item - Resultado da criação do Bootlist
+* [x] Criação de Item - Configurando log
+* [x] Criação de Item - Gerando log
+* [x] Criação de Item - Removendo Scripts Adapterfail
+* [x] Criação de Item - Removendo Scripts Bootlist
+* [x] HostID - Configurando log
+* [x] Removendo Primeiro Registro Zabbix server - Copiando Script
+* [x] Removendo Primeiro Registro Zabbix server - Deletando o Primeiro Registro "Zabbix server"
+* [x] Removendo Primeiro Registro Zabbix server - Resultado da remoção
+* [x] HostID - Removendo Scripts zbx_del_first_zbxsrv
