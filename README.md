@@ -78,6 +78,8 @@ zabbix-server | SUCCESS => {
 ansible-playbook -i inventories/lab/hosts.yml -u root -k zabbix-server.yml
 ```
 
+When finished, this will be the infrastructure created:
+
 ![img0](./docs/img/img0.png)
 
 #### **idempotent**
