@@ -65,6 +65,8 @@ zabbix-server | SUCCESS => {
 ansible-playbook -i inventories/lab/hosts.yml -u root -k zabbix-server.yml
 ```
 
+![img0](./docs/img/img0.png)
+
 #### **idempotent**
 
 This playbook will not be executed again if the log files already exist.
