@@ -2,11 +2,13 @@
 
 ## **Requirements**
 
-* Server  
-  * Redhat Operation System Family
-  * SSH Access
-  * Docker 19.03+
-  * ansible 2.9.21+
+### **Zabbix Server**
+
+* [x] Internet Access
+* [x] Redhat Operation System Family
+* [x] SSH Access
+* [x] Docker 19.03+
+* [x] Ansible 2.9.21+
 
 ## **Attention**
 
