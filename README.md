@@ -65,6 +65,18 @@ zabbix-server | SUCCESS => {
 ansible-playbook -i inventories/lab/hosts.yml -u root -k zabbix-server.yml
 ```
 
+#### **idempotent**
+
+This playbook will not be executed again if the log files already exist.
+
+The logs file are:
+
+* **/tmp/aix_check.log**
+* **/tmp/hostid_check.log**
+* **/tmp/ssl_check.log**
+* **/tmp/zabbix_custom.log**
+* **/tmp/zbx_hostgroup.out**
+
 #### **Roles**
 
 #### **common**
