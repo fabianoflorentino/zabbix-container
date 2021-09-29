@@ -8,6 +8,12 @@
   * Docker 19.03+
   * ansible 2.9.21+
 
+## **Attention**
+
+The images are based on my public [Docker Hub - fabianoflorentino](https://hub.docker.com/u/fabianoflorentino).
+
+**Is very strongly recommended to build your own images.**
+
 <details>
   <summary><b>Zabbix Server</b> <em>(Details)</em></summary>
 
