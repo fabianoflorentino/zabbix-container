@@ -1,73 +1,81 @@
 ---
-- name: Ajustando o Hostname
-  hostname:
+- name: Update hostname
+  ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
 
-- name: "Atualizando /etc/hosts - {{ inventory_hostname }}"
-  lineinfile:
+- name: Add hostname to /etc/hosts
+  ansible.builtin.lineinfile:
     path: /etc/hosts
     line: "{{ hostvars[item]['ansible_host'] }} {{ hostvars[item]['inventory_hostname'] }}"
   loop: "{{ groups['all'] }}"
 
-- name: Habilitando IP forward
-  sysctl:
+- name: Enabled IP forward
+  ansible.posix.sysctl:
     name: net.ipv4.ip_forward
     value: '1'
     sysctl_set: yes
     state: present
     reload: yes
 
-- name: Preparando o sistema operacional
+- name: Prepare the system for installation
   block:
-    - name: Atualizando o Sistema
-      package:
+    - name: Update system
+      ansible.builtin.package:
         name: "*"
         state: latest
-      ignore_errors: yes
 
-    - name: Instalando pacotes essenciais
-      package:
+
+    - name: Install essential packages
+      ansible.builtin.package:
         name:  "{{ item }}"
         state: present
       loop: "{{ packages.to_install }}"
 
-    - name: Modulo Pip
+    - name: Install Module Pip
       pip:
         name:
           - "{{ item }}"
+        executable: pip3
       loop: "{{ pip.to_install }}"
+
+  rescue:
+    - name: Failed to install packages
+      ansible.builtin.fail:
+        msg: "Failed to install packages"
 
 - name: Docker
   block:
     - name: Verificando pre requisitos
-      package_facts:
+      ansible.builtin.package_facts:
         manager: auto
 
     - name: Verificando se o repositório Docker existe
-      stat:
+      ansible.builtin.stat:
         path: "{{ path_docker_repo }}"
       register: docker_repo
 
     - name: Habilitando o Repositório do Docker
-      yum_repository:
+      ansible.builtin.yum_repository:
         name: docker
         description: Docker CE Stable - $basearch
         baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
         gpgcheck: yes
         enabled: yes
         gpgkey: https://download.docker.com/linux/centos/gpg
-      when:
-        - (docker_repo.stat.exists == false)
+      when: docker_repo.stat.exists == false
 
     - name: Instalando Docker
-      yum:
-        name:  docker-ce
+      ansible.builtin.yum:
+        name: docker-ce
         state: present
-      ignore_errors: yes
 
-    - name: Habilitando o Servico do Docker
-      systemd:
+    - name: Enable docker service on systemctl
+      ansible.builtin.systemd:
         name: docker
         enabled: yes
         state: started
-      ignore_errors: yes  
+
+  rescue:
+    - name: "Error: {{ ansible_failed_result.msg }}"
+      ansible.builtin.fail:
+        msg: "Error: {{ ansible_failed_result.msg }}"
