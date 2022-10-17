@@ -7,9 +7,9 @@ packages:
     - yum-utils
     - device-mapper-persistent-data
     - lvm2
-    - python2-pip
-    - https://cbs.centos.org/kojifiles/packages/python-docker/2.5.1/2.el7/noarch/python2-docker-2.5.1-2.el7.noarch.rpm
+    - python3
+    - python3-pip
 
 pip:
   to_install:
-    - 'docker==4.4.4'
+    - 'docker==5.0.0'
