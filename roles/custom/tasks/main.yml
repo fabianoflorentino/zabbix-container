@@ -24,7 +24,7 @@
         mode: "0755"
 
     - name: Generate zabbix token api
-      cansible.builtin.ommand:
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_get_token_api.sh
       register: zabbix_auth_token
 
@@ -33,7 +33,7 @@
         path: "/tmp/zbx_get_token_api.sh"
         state: absent
     
-    #HostID
+    # HostID
     - name: Generate zabbix hostid
       ansible.builtin.template:
         src: "zbx_get_host.sh.j2"
