@@ -1,6 +1,6 @@
 ---
-- name: Aguardando o Zabbix Web
-  wait_for:
+- name: Waiting Zabbix Web to be ready
+  ansible.builtin.wait_for:
     host: "{{ zabbix_server_ip }}"
     port: "8080"
     connect_timeout: 15
@@ -10,190 +10,189 @@
     state: started
   register: zabbix_web_state
 
-- name: Zabbix Custom - Verificando as customizações do Zabbix
-  stat:
+- name: Verify Zabbix customizations
+  ansible.builtin.stat:
     path: "/tmp/zabbix_custom.log"
   register: zabbix_custom
 
-- name: Zabbix Custom
+- name: Customs 
   block:
-    - name: Token - Copiando o script para gerar o token
-      template:
+    - name: Script to generate zabbix token api
+      ansible.builtin.template:
         src: "zbx_get_token_api.sh.j2"
         dest: "/tmp/zbx_get_token_api.sh"
         mode: "0755"
 
-    - name: Token - Gerando um token de autenticação
-      command:
+    - name: Generate zabbix token api
+      cansible.builtin.ommand:
         cmd: bash /tmp/zbx_get_token_api.sh
       register: zabbix_auth_token
 
-    - name: Token - Removendo Scripts Temporários de Customização
-      file:
+    - name: Remove zabbix token api script
+      ansible.builtin.file:
         path: "/tmp/zbx_get_token_api.sh"
         state: absent
     
     #HostID
-    - name: HostID - Copiando o script para gerar o hostid
-      template:
+    - name: Generate zabbix hostid
+      ansible.builtin.template:
         src: "zbx_get_host.sh.j2"
         dest: "/tmp/zbx_get_host.sh"
         mode: "0755"
 
-    - name: HostID - Gerando um token de autenticação
-      command:
+    - name: Get zabbix hostid
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_get_host.sh
       register: zabbix_host_id
 
-    - name: HostID - Removendo Scripts Temporários de Customização
-      file:
+    - name: Remove zabbix hostid script
+      ansible.builtin.file:
         path: "/tmp/zbx_get_host.sh"
         state: absent
 
 # Slack Alerts
-    - name: Slack Alerts - Disponibilizando Scripts
-      template:
+    - name: Deploy script to Slack Alerts
+      ansible.builtin.template:
         src: "{{ item }}.j2"
         dest: "/tmp/{{ item }}"
         mode: "0755"
       loop: "{{ scripts_zbx_alertscripts }}"
 
-    - name: Slack Alerts - Copiando o script para o zabbix server
-      shell: >
+    - name: Send script Slack Alerts to Zabbix Server
+      ansible.builtin.shell: >
         docker cp "/tmp/slack_alerts.sh" {{ zabbix_server_container_name }}:"/usr/lib/zabbix/alertscripts/slack_alerts.sh"
       register: slack_alerts
 
-    - name: Slack Alerts - Criando Media para Alerta
-      command:
+    - name: Deploy script to media type
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_create_media.sh
       register: slack_media
 
-    - name: Slack Alerts - Removendo Scripts Temporários
-      file:
+    - name: Remove temporary scripts
+      ansible.builtin.file:
         path: "/tmp/{{ item }}"
         state: absent
       loop: "{{ scripts_zbx_alertscripts }}"
 
-    - name: Resultado da criação do Slack Alert
-      debug:
+    - name: Result to Slack Alerts 
+      ansible.builtin.debug:
         msg: "{{ slack_media.stdout }}"
 
-    - name: Slack Alerts - Configurando log
-      file:
+    - name: Configure logs to customizations
+      ansible.builtin.file:
         path: "/tmp/zabbix_custom.log"
         state: touch
 
-    - name: Slack Alerts - Gerando log
-      lineinfile:
+    - name: Generate log to customizations
+      ansible.builtin.lineinfile:
         path: "/tmp/zabbix_custom.log"
         line: "Slack Alerts configurado"
 
 
 # Auto Registro Linux
-    - name: Auto Registro Linux - Copiando o script para gerar o auto regitro
-      template:
+    - name: Send script for create Auto Register Linux to Zabbix Server
+      ansible.builtin.template:
         src: "zbx_auto_registration_linux_servers.sh.j2"
         dest: "/tmp/zbx_auto_registration_linux_servers.sh"
         mode: "0755"
 
-    - name: Auto Registro Linux - Criando Auto Registro de Servidores Linux
-      command:
+    - name: Deploy script for create Auto Register Linux
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_auto_registration_linux_servers.sh
       register: zbx_auto_registration_linux_servers
 
-    - name: Auto Registro Linux - Resultado da criação do Auto Registro de Servidores Linux
-      debug:
+    - name: Result of the script for create Auto Register Linux
+      ansible.builtin.debug:
         msg: "{{ zbx_auto_registration_linux_servers.stdout }}"
 
-    - name: Auto Registro Linux - Removendo Scripts Temporários
-      file:
+    - name: Cleanup script for create Auto Register Linux
+      ansible.builtin.file:
         path: "/tmp/zbx_auto_registration_linux_servers.sh"
         state: absent
 
 
 # Auto Registro Windows
-    - name: Auto Registro Windows - Copiando o script para gerar o auto regitro
-      template:
+    - name: Send script for create Auto Register Windows to Zabbix Server
+      ansible.builtin.template:
         src: "zbx_auto_registration_windows_servers.sh.j2"
         dest: "/tmp/zbx_auto_registration_windows_servers.sh"
         mode: "0755"
 
-    - name: Auto Registro Windows - Criando Auto Registro de Servidores Windows
-      command:
+    - name: Deploy script for create Auto Register Windows
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_auto_registration_windows_servers.sh
       register: zbx_auto_registration_windows_servers
 
-    - name: Resultado da criação do Auto Registro de Servidores Windows no Zabbix
-      debug:
+    - name: Result of the script for create Auto Register Windows
+      ansible.builtin.debug:
         msg: "{{ zbx_auto_registration_windows_servers.stdout }}"
 
-    - name: Auto Registro Windows - Removendo Scripts Temporários de Customização
-      file:
+    - name: Cleanup script for create Auto Register Windows
+      ansible.builtin.file:
         path: "/tmp/zbx_auto_registration_windows_servers.sh"
         state: absent
 
 
 # Reporte de Problemas
-    - name: Reporte de Problemas - Copiando o script para gerar o reporte de problemas
-      template:
+    - name: Send script for create Report Problems on Zabbix Server
+      ansible.builtin.template:
         src: "zbx_report_problem_to_slack.sh.j2"
         dest: "/tmp/zbx_report_problem_to_slack.sh"
         mode: "0755"
 
-    - name: Reporte de Problemas - Criando Slack Reporte de Problemas
-      command:
+    - name: Deploy script for create Report Problems on Zabbix Server
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_report_problem_to_slack.sh
       register: zbx_report_problem_to_slack
 
-    - name: Resultado da criação do Slack Report de Problema
-      debug:
+    - name: Result of the script for create Report Problems on Zabbix Server
+      ansible.builtin.debug:
         msg: "{{ zbx_report_problem_to_slack.stdout }}"
 
-    - name: Reporte de Problemas - Removendo Scripts Temporários
-      file:
+    - name: Cleanup script for create Report Problems on Zabbix Server
+      ansible.builtin.file:
         path: "/tmp/zbx_report_problem_to_slack.sh"
         state: absent
-  when:
-    - (zabbix_custom.stat.exists != true)
+  when: zabbix_custom.stat.exists == false
 
 
 # SSL Check
-- name: SSL Check - Verificando as customizações do Zabbix
-  stat:
+- name: SSL Check
+  ansible.builtin.stat:
     path: "/tmp/ssl_check.log"
   register: ssl_check
 
 - name: SSL Check
   block:
-    - name: SSL Check - Disponibilizando Scripts
-      template:
+    - name: Send SSL Check script to Zabbix Server
+      ansible.builtin.template:
         src: "{{ item }}.j2"
         dest: "/tmp/{{ item }}"
         mode: "0755"
       loop: "{{ scripts_zbx_externalscripts }}"
 
-    - name: SSL Check - Copiando os scripts para o zabbix server
-      shell: |
+    - name: Deploy SSL Check script to Zabbix Server
+      ansible.builtin.shell: |
         docker cp "/tmp/{{ item }}" {{ zabbix_server_container_name }}:"/usr/lib/zabbix/externalscripts/{{ item }}"
       args:
         executable: /bin/sh
       register: ssl_check_copy
       loop: "{{ scripts_zbx_externalscripts }}"
 
-    - name: SSL Check - Removendo Scripts Temporários de Customização
-      file:
+    - name: Cleanup SSL Check script to Zabbix Server
+      ansible.builtin.file:
         path: "/tmp/{{ item }}"
         state: absent
       loop: "{{ scripts_zbx_externalscripts }}"
 
     # Log
-    - name: SSL Check - Configurando log
-      file:
+    - name: Log SSL Check script to Zabbix Server
+      ansible.builtin.file:
         path: "/tmp/ssl_check.log"
         state: touch
 
-    - name: SSL Check - Gerando log
-      lineinfile:
+    - name: Generate Log SSL Check script to Zabbix Server
+      ansible.builtin.lineinfile:
         path: "/tmp/ssl_check.log"
         line: "Scripts de SSL Check configurados"
   when:
@@ -201,107 +200,105 @@
 
 
 # AIX Check Itens
-- name: AIX - Verificando as customizações do Zabbix
-  stat:
+- name: AIX Check Log
+  ansible.builtin.stat:
     path: "/tmp/aix_check.log"
   register: aix_check
 
 - name: AIX
   block:
-    #bpadapterfail
-    - name: Criação de Item - Copiando Script Adapterfail
-      template:
+    # bpadapterfail
+    - name: Create Item to Script Adapterfail
+      ansible.builtin.template:
         src: "aix_check_bpadapterfail.sh.j2"
         dest: "/tmp/aix_check_bpadapterfail.sh"
         mode: "0755"
 
-    - name: Criação de Item - Criando o Item Adapterfail
-      command:
+    - name: Deploy Item to Script Adapterfail
+      ansible.builtin.command:
         cmd: bash /tmp/aix_check_bpadapterfail.sh
       register: aix_check_bpadapterfail
 
-    - name: Criação de Item - Resultado da criação do Adapterfail
+    - name: Result Create Item to Script Adapterfail
       debug:
         msg: "{{ aix_check_bpadapterfail.stdout }}"
 
-    - name: Criação de Item - Configurando log
-      file:
+    - name: Log Create Item to Script Adapterfail
+      ansible.builtin.file:
         path: "/tmp/aix_check.log"
         state: touch
     
-    #bpbootlist
-    - name: Criação de Item - Copiando Script Bootlist
-      template:
+    # bpbootlist
+    - name: Create Item to Script Bootlist
+      ansible.builtin.template:
         src: "aix_check_bpbootlist.sh.j2"
         dest: "/tmp/aix_check_bpbootlist.sh"
         mode: "0755"
 
-    - name: Criação de Item - Criando o Item Bootlist
-      command:
+    - name: Deploy Item to Script Bootlist
+      ansible.builtin.command:
         cmd: bash /tmp/aix_check_bpbootlist.sh
       register: aix_check_bpbootlist
 
-    - name: Criação de Item - Resultado da criação do Bootlist
-      debug:
+    - name: Result Item to Script Bootlist
+      ansible.builtin.debug:
         msg: "{{ aix_check_bpbootlist.stdout }}"
 
     # Log
-    - name: Criação de Item - Configurando log
-      file:
+    - name: Log Create Item to Script
+      ansible.builtin.file:
         path: "/tmp/aix_check.log"
         state: touch
 
-    - name: Criação de Item - Gerando log
-      lineinfile:
+    - name: Generate Log Create Item to Script
+      ansible.builtin.lineinfile:
         path: "/tmp/aix_check.log"
         line: "Scripts de AIX Check configurados"
 
     # Remoção
-    - name: Criação de Item - Removendo Scripts Adapterfail
-      file:
+    - name: Cleanup Scripts Adapterfail
+      ansible.builtin.file:
         path: "/tmp/aix_check_bpadapterfail.sh"
         state: absent
 
-    - name: Criação de Item - Removendo Scripts Bootlist
-      file:
+    - name: Cleanup Bootlist
+      ansible.builtin.file:
         path: "/tmp/aix_check_bpbootlist.sh"
         state: absent
-  when:
-    - (aix_check.stat.exists != true)
+  when: aix_check.stat.exists == false
 
 
 # HostID
-- name: HostID - Verificando as customizações do Zabbix
-  stat:
+- name: HostID
+  ansible.builtin.stat:
     path: "/tmp/hostid.log"
   register: hostid_check
 
 - name: HostID
   block:
-    - name: HostID - Configurando log
-      file:
+    - name: Configure Log HostID
+      ansible.builtin.file:
         path: "/tmp/hostid_check.log"
         state: touch
 
-    - name: Removendo Primeiro Registro Zabbix server - Copiando Script
-      template:
+    - name: Send script to remove the first zabbix serve register on Zabbix Server
+      ansible.builtin.template:
         src: "zbx_del_first_zbxsrv.sh.j2"
         dest: "/tmp/zbx_del_first_zbxsrv.sh"
         mode: "0755"
     
-    - name: Removendo Primeiro Registro Zabbix server - Deletando o Primeiro Registro "Zabbix server"
-      command:
+    - name: Cleanup script to remove the first zabbix serve register on Zabbix Server
+      ansible.builtin.command:
         cmd: bash /tmp/zbx_del_first_zbxsrv.sh
       register: zbx_del_first_zbxsrv
     
-    - name: Removendo Primeiro Registro Zabbix server - Resultado da remoção
-      debug:
+    - name: Result cleanup script to remove the first zabbix serve register on Zabbix Server
+      ansible.builtin.debug:
         msg: "{{ zbx_del_first_zbxsrv }}"
     
     # Remoção
-    - name: HostID - Removendo Scripts zbx_del_first_zbxsrv
-      file:
+    - name: Remove script to remove the first zabbix serve register on Zabbix Server
+      ansible.builtin.file:
         path: "/tmp/zbx_del_first_zbxsrv.sh"
         state: absent
-  when:
-    - (hostid_check.stat.exists != true)
+  when: hostid_check.stat.exists == false
