@@ -2,18 +2,11 @@
 - name: Serviço de Monitoramento com Zabbix + Grafana em Container Docker
   hosts:
     - zabbix-server
-  gather_facts: True
-  pre_tasks:
-    - setup:
-        gather_subset:
-          - '!all'
-          - '!any'
-          - 'network'
-          - 'virtual'
+  gather_facts: true
   roles:
-    - {role: common,  tags: 'common'}
-    - {role: mysql,   tags: 'mysql'}
-    - {role: server,  tags: 'zabbix_server'}
-    - {role: web,     tags: 'zabbix_web'}
-    - {role: grafana, tags: 'grafana'}
-    - {role: custom,  tags: 'custom'}
+    - { role: common, tags: ['common'] }
+    - { role: mysql, tags: ['mysql'] }
+    - { role: server, tags: ['server'] }
+    - { role: web, tags: ['web'] }
+    - { role: grafana, tags: ['grafana'] }
+    - { role: custom, tags: ['custom'] }
