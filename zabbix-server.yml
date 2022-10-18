@@ -1,5 +1,5 @@
 ---
-- name: Serviço de Monitoramento com Zabbix + Grafana em Container Docker
+- name: Monitoring service with Zabbix and Grafana
   hosts:
     - zabbix-server
   gather_facts: true
