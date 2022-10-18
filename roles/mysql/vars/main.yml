@@ -1,9 +1,15 @@
 ---
 # MySQL
 mysql_container_name: "mysql-server"
-mysql_image: "fabianoflorentino/mysql"
-mysql_image_tar: "fabianoflorentino-mysql.tar"
+mysql_image: "fabianoflorentino/mysql:8.0-oracle"
+mysql_image_tar: "fabianoflorentino-mysql-80-oracle.tar"
 mysql_file_dest: "/tmp/{{ mysql_image_tar }}"
 mysql_zbx_db: "zabbix"
 mysql_zbx_db_user: "zabbix"
-mysql_command: ["--character-set-server=utf8", "--collation-server=utf8_bin"]
+mysql_command: [
+  "mysqld", 
+  "--character-set-server=utf8mb4", 
+  "--collation-server=utf8mb4_bin", 
+  "--skip-character-set-client-handshake", 
+  "--default-authentication-plugin=mysql_native_password"
+]

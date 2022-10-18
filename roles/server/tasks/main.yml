@@ -1,12 +1,12 @@
 ---
-- name: Verificando se o container existe
+- name: Verify if Zabbix Server container is running
   docker_container_info:
     name: "{{ zabbix_server_container_name }}"
   register: zabbix_server_result
 
 - name: Zabbix Server
   block:
-    - name: Download da imagem
+    - name: Download image
       docker_image:
         name: "{{ zabbix_server_image }}"
         source: pull
@@ -28,17 +28,17 @@
         - zabbix-server-keys
         - zabbix-server-ssl_ca
 
-    - name: Iniciando o container
+    - name: Inicialize Container Zabbix Server
       docker_container:
         name: "{{ zabbix_server_container_name }}"
         image: "{{ zabbix_server_image }}"
         state: started
+        container_default_behavior: no_defaults
         restart: yes
         recreate: yes
         restart_policy: unless-stopped
         networks_cli_compatible: yes
-        networks:
-          - name: zabbix-stack
+        network_mode: zabbix-stack
         volumes:
           - zabbix-server-alertscripts:/usr/lib/zabbix/alertscripts
           - zabbix-server-externalscripts:/usr/lib/zabbix/externalscripts
@@ -63,11 +63,10 @@
           MYSQL_ROOT_PASSWORD: "{{ mysql_root_pwd }}"
           ZBX_CACHESIZE: "{{ zabbix_server_cachesize }}"
   rescue:
-    - name:
-      debug:
-        msg: "Please check your internet connection"
-  when:
-    - (zabbix_server_result.exists != true)
+    - name: Zabbix Server Failed
+      ansible.builtin.fail:
+        msg: ansible_failed_result
+  when: zabbix_server_result.exists == false
 
 - name: Zabbix Agent for Server
   block:
@@ -76,18 +75,17 @@
         name: "{{ zabbix_agent_image }}"
         source: pull
 
-    - name: Inciando o container
+    - name: Initialize Zabbix Agent
       docker_container:
         name: "{{ zabbix_agent_container_name }}"
         image: "{{ zabbix_agent_image }}"
         state: started
+        container_default_behavior: no_defaults
         restart: yes
         recreate: yes
         restart_policy: unless-stopped
         networks_cli_compatible: yes
-        networks:
-          - name: zabbix-stack
-            links: "{{ zabbix_server_container_name }}:zabbix-server"
+        network_mode: zabbix-stack
         links:
           - "{{ zabbix_server_container_name }}:zabbix-server-mysql"
         env:
@@ -96,8 +94,7 @@
           ZBX_HOSTNAME: "{{ zabbix_agent_hostname }}"
           ZBX_STARTAGENTS: "{{ zabbix_agent_startagents }}"
   rescue:
-    - name:
-      debug:
-        msg: "Please check your internet connection"
-  when:
-    - (zabbix_server_result.exists != true)
+    - name: Zabbix Agent Failed
+      ansible.builtin.fail:
+        msg: ansible_failed_result
+  when: zabbix_server_result.exists == false

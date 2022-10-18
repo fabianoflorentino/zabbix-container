@@ -1,4 +1,4 @@
-ARG GRAFANA_VERSION="latest"
+ARG GRAFANA_VERSION="9.2.1"
 
 FROM grafana/grafana:${GRAFANA_VERSION}
 

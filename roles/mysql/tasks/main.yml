@@ -1,6 +1,6 @@
 ---
-- name: Verificando se o container existe
-  docker_container_info:
+- name: Verify if MySQL container is running
+  community.docker.docker_container_info:
     name: "{{ mysql_container_name }}"
   register: mysql_server_result
 
@@ -11,26 +11,27 @@
         name: "{{ mysql_image }}"
         source: pull
 
-    - name: Criando Network
+    - name: Created Network
       docker_network:
         name: zabbix-stack
         appends: yes
 
-    - name: Criando volume
-      docker_volume:
+    - name: Created volume
+      community.docker.docker_volume:
         name: mysql-server
+        recreate: options-changed
         state: present
 
-    - name: Iniciando o Container
-      docker_container:
+    - name: Initializing the MySQL container
+      community.docker.docker_container:
         name: mysql-server
         image: "{{ mysql_image }}"
         state: started
+        container_default_behavior: no_defaults
         recreate: yes
         restart: yes
         networks_cli_compatible: yes
-        networks:
-          - name: zabbix-stack
+        network_mode: zabbix-stack
         volumes:
           - mysql-server:/var/lib/mysql
         restart_policy: unless-stopped
@@ -41,8 +42,7 @@
           MYSQL_PASSWORD: "{{ mysql_zbx_db_pwd }}"
           MYSQL_ROOT_PASSWORD: "{{ mysql_root_pwd }}"
   rescue:
-    - name:
-      debug:
-        msg: "Please check your internet connection"
-  when:    
-    - (mysql_server_result.exists != true)
+    - name: Fail deploy MySQL
+      ansible.builtin.fail:
+        msg: "Deploy MySQL failed"
+  when: mysql_server_result.exists == false

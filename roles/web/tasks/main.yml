@@ -1,29 +1,30 @@
 ---
-- name: "{{ zabbix_web_container_name }} - Verificando se o container existe"
+- name: Verify if Zabbix Web Container is running
   docker_container_info:
     name: "{{ zabbix_web_container_name }}"
   register: zabbix_web_result
 
 - name: Zabbix Web
   block:
-    - name: "{{ zabbix_web_container_name }} - Dockerhub"
-      docker_image:
+    - name: Docker Image Zabbix Web
+      community.docker.docker_image:
         name: "{{ zabbix_web_image }}"
         source: pull
 
-    - name: Criando volume
-      docker_volume:
+    - name: Create volume for Zabbix Web
+      community.docker.docker_volume:
         name: "{{ item }}"
         state: present
       loop:
         - zabbix-web-nginx
         - zabbix-web-modules
 
-    - name: "{{ zabbix_web_container_name }} - Iniciando container"
-      docker_container:
+    - name: Initialize Zabbix Web
+      community.docker.docker_container:
         name: "{{ zabbix_web_container_name }}"
         image: "{{ zabbix_web_image }}"
         state: started
+        container_default_behavior: no_defaults        
         restart: yes
         recreate: yes
         restart_policy: unless-stopped
@@ -31,8 +32,7 @@
           - zabbix-web-nginx:/etc/ssl/nginx
           - zabbix-web-modules:/usr/share/zabbix/modules
         networks_cli_compatible: yes
-        networks:
-          - name: zabbix-stack
+        network_mode: zabbix-stack
         links:
           - "{{ mysql_container_name }}:mysql-server"
           - "{{ zabbix_server_container_name }}:zabbix-server-mysql"
@@ -48,8 +48,7 @@
           MYSQL_ROOT_PASSWORD: "{{ mysql_root_pwd }}"
           PHP_TZ: "{{ zabbix_web_php_tz }}"
   rescue:
-    - name:
-      debug:
-        msg: "Please check your internet connection"
-  when:
-    - (zabbix_web_result.exists !=  true)
+    - name: Zabbix Web Fail
+      ansible.builtin.fail:
+        msg: ansible_failed_result
+  when: zabbix_web_result.exists == false

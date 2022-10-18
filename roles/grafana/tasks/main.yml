@@ -1,35 +1,33 @@
 ---
-- name: Verificando se o container existe
+- name: Verify if grafana container exists
   docker_container_info:
     name: "{{ grafana_container_name }}"
   register: grafana_result
 
 - name: Grafana
   block:
-    - name: Download da imagem
+    - name: Download grafana image
       docker_image:
         name: "{{ grafana_image }}"
         source: pull
 
-    - name: Iniciando o Container
+    - name: Create grafana container
       docker_container:
         name: "{{ grafana_container_name }}"
         image: "{{ grafana_image }}"
         state: started
+        container_default_behavior: no_defaults        
         recreate: yes
         restart: yes
         restart_policy: unless-stopped
         networks_cli_compatible: yes
-        networks:
-          - name: zabbix-stack
-            links: "{{ zabbix_web_container_name }}:zabbix-console-web"
+        network_mode: zabbix-stack
         links:
           - "{{ zabbix_web_container_name }}:zabbix-console-web"
         ports:
           - "{{ grafana_port }}"
   rescue:
-    - name:
-      debug:
-        msg: "Please check your internet connection"
-  when:
-    - (grafana_result.exists != true)
+    - name: Grafana container Failed
+      ansible.builtin.fail:
+        msg: ansible_failed_result
+  when: grafana_result.exists == false
