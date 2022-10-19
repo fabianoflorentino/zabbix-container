@@ -11,9 +11,6 @@ curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix
 		"name": "Linux Servers",
 		"eventsource": 2,
 		"status": 0,
-		"esc_period": 120,
-		"def_shortdata": "{HOST.HOST}",
-		"def_longdata": "Host name: {HOST.HOST}\r\nHost IP: {HOST.IP}\r\nAgent port: {HOST.PORT}",
 		"filter": {
 			"evaltype": 0,
 			"conditions": [
@@ -40,8 +37,7 @@ curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix
 				"operationtype": 4,
 				"opgroup": [
 					{
-						"groupid": "2",
-						"operationid": "4"
+						"groupid": "2"
 					}
 				]
 			},
@@ -49,8 +45,7 @@ curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix
 				"operationtype": 5,
 				"opgroup": [
 					{
-						"groupid": "5",
-						"operationid": "5"
+						"groupid": "5"
 					}
 				]
 			},
@@ -58,8 +53,7 @@ curl --silent --location --request POST 'http://{{ zabbix_server_ip }}:{{ zabbix
 				"operationtype": 10,
 				"opinventory":
 				{
-					"inventory_mode": 1,
-					"operationid": "10"
+					"inventory_mode": 1
 				}
 			}
 		]
