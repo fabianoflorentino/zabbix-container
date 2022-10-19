@@ -281,23 +281,23 @@
         path: "/tmp/hostid_check.log"
         state: touch
 
-    - name: Send script to remove the first zabbix serve register on Zabbix Server
+    - name: Send script to remove the first zabbix server register on Zabbix Server
       ansible.builtin.template:
         src: "zbx_del_first_zbxsrv.sh.j2"
         dest: "/tmp/zbx_del_first_zbxsrv.sh"
         mode: "0755"
     
-    - name: Cleanup script to remove the first zabbix serve register on Zabbix Server
+    - name: Cleanup script to remove the first zabbix server register on Zabbix Server
       ansible.builtin.command:
         cmd: bash /tmp/zbx_del_first_zbxsrv.sh
       register: zbx_del_first_zbxsrv
     
-    - name: Result cleanup script to remove the first zabbix serve register on Zabbix Server
+    - name: Result cleanup script to remove the first zabbix server register on Zabbix Server
       ansible.builtin.debug:
         msg: "{{ zbx_del_first_zbxsrv }}"
     
     # Remoção
-    - name: Remove script to remove the first zabbix serve register on Zabbix Server
+    - name: Remove script to remove the first zabbix server register on Zabbix Server
       ansible.builtin.file:
         path: "/tmp/zbx_del_first_zbxsrv.sh"
         state: absent

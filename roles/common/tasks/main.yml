@@ -27,12 +27,12 @@
 
     - name: Install essential packages
       ansible.builtin.package:
-        name:  "{{ item }}"
+        name: "{{ item }}"
         state: present
       loop: "{{ packages.to_install }}"
 
     - name: Install Module Pip
-      pip:
+      ansible.builtin.pip:
         name:
           - "{{ item }}"
         executable: pip3
