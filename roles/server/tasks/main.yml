@@ -86,6 +86,9 @@
         restart_policy: unless-stopped
         networks_cli_compatible: yes
         network_mode: zabbix-stack
+        networks:
+          - name: zabbix-stack
+            links: "{{ zabbix_server_container_name }}:zabbix-server"
         links:
           - "{{ zabbix_server_container_name }}:zabbix-server-mysql"
         env:
