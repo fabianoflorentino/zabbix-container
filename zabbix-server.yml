@@ -2,7 +2,7 @@
 - name: Monitoring service with Zabbix and Grafana
   hosts:
     - zabbix-server
-  gather_facts: true
+  gather_facts: false
   roles:
     - { role: common, tags: ['common'] }
     - { role: mysql, tags: ['mysql'] }
