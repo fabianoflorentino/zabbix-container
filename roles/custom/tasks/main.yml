@@ -286,6 +286,7 @@
         src: "zbx_del_first_zbxsrv.sh.j2"
         dest: "/tmp/zbx_del_first_zbxsrv.sh"
         mode: "0755"
+      
     
     - name: Cleanup script to remove the first zabbix server register on Zabbix Server
       ansible.builtin.command:
@@ -301,4 +302,8 @@
       ansible.builtin.file:
         path: "/tmp/zbx_del_first_zbxsrv.sh"
         state: absent
-  when: hostid_check.stat.exists == false
+  rescue:
+    - name: HostID Failed
+      ansible.builtin.fail:
+        msg: ansible_failed_result
+  when: zabbix_custom.stat.exists == false
