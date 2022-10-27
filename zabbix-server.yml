@@ -1,6 +1,6 @@
 ---
 - name: Monitoring service with Zabbix and Grafana
-  hosts: all
+  hosts: zabbix-server
   gather_facts: false
   roles:
     - { role: common, tags: ['common'] }
